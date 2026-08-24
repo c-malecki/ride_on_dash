@@ -13,6 +13,7 @@ typedef enum {
   APP_COLOR_BLUE,
   APP_COLOR_VIOLET,
   APP_COLOR_GRAY,
+  APP_COLOR_COUNT,
 } App_Color_ID;
 
 typedef struct {
@@ -21,16 +22,13 @@ typedef struct {
   uint8_t b;
 } App_Color_t;
 
-extern const App_Color_t app_color_none;
-extern const App_Color_t app_color_white;
-extern const App_Color_t app_color_red;
-extern const App_Color_t app_color_orange;
-extern const App_Color_t app_color_yellow;
-extern const App_Color_t app_color_green;
-extern const App_Color_t app_color_blue;
-extern const App_Color_t app_color_violet;
-extern const App_Color_t app_color_gray;
+typedef struct {
+  App_Color_ID color_id;
+  const App_Color_t *color;
+  const char *label;
+} App_Color_Table_Entry_t;
 
-App_Color_t App_Color_Lookup(App_Color_ID app_color_id);
+const App_Color_Table_Entry_t *App_Color_Get_Entry(App_Color_ID color_id);
+uint8_t App_Color_Get_Count(void);
 
 #endif // __UTIL_H_

@@ -4,6 +4,8 @@
 #include "freertos/semphr.h"
 #include "led.h"
 #include "lvgl.h"
+// #include "sound.h"
+// #include "storage.h"
 
 static SemaphoreHandle_t lvgl_mutex = NULL;
 
@@ -24,6 +26,14 @@ void app_main(void) {
   // drivers
   esp_err_t err = LED_Init();
   ESP_ERROR_CHECK(err);
+
+  // err = Sound_Init();
+  // ESP_ERROR_CHECK(err);
+
+  // err = Storage_Init();
+  // ESP_ERROR_CHECK(err);
+
+  lvgl_mutex = xSemaphoreCreateMutex();
 
   // lvgl app setup (Model-View-Presenter)
   err = App_LVGL_Setup();

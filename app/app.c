@@ -1,11 +1,18 @@
 #include "app.h"
 #include "config.h"
+#include "display/lv_display.h"
+#include "esp_err.h"
 #include "esp_lcd_ili9341.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_touch_xpt2046.h"
 #include "esp_timer.h"
 #include "lvgl.h"
+//
+#include "model_accessory.h"
+#include "presenter_accessory.h"
+#include "view_accessory.h"
+#include "view_base.h"
 
 /* STATIC VARS */
 
@@ -15,6 +22,9 @@ static esp_lcd_panel_io_handle_t io_handle = NULL;
 static esp_lcd_panel_handle_t panel_handle = NULL;
 static esp_lcd_touch_handle_t touch_handle = NULL;
 
+static Model_Accessory_t model_accessory;
+static Presenter_Accessory_t presenter_accessory;
+
 /* FORWARD PROTO DEP */
 
 esp_err_t display_init(void);
@@ -22,9 +32,20 @@ esp_err_t display_init(void);
 /* INTERFACE */
 
 esp_err_t App_LVGL_Setup(void) {
-  // setup models, views, presenters
+  esp_err_t err = display_init();
+  if (err != ESP_OK) {
+    return err;
+  }
 
-  return display_init();
+  // setup models, views, presenters
+  Model_Accessory_Init(&model_accessory);
+  Presenter_Accessory_Create(&presenter_accessory, &model_accessory);
+  Presenter_Accessory_Init(&presenter_accessory.base);
+
+  static View_Base_t view_accessory = {.ctx = &presenter_accessory};
+  View_Accessory_Create(&view_accessory, lv_screen_active());
+
+  return ESP_OK;
 };
 
 /* LVGL APP SETUP */
