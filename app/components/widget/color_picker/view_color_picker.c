@@ -1,19 +1,19 @@
 #include "view_color_picker.h"
-#include "model_color_picker.h"
 #include "presenter_color_picker.h"
+#include "ui_helpers.h"
 #include "util.h"
-#include "view_helpers.h"
 
 static void draw_cb(lv_event_t *lv_event);
 
-static const App_Color_ID picker_colors[9] = {
-    APP_COLOR_WHITE, APP_COLOR_RED,  APP_COLOR_ORANGE, APP_COLOR_YELLOW,
-    APP_COLOR_GREEN, APP_COLOR_BLUE, APP_COLOR_VIOLET, APP_COLOR_GRAY,
-    APP_COLOR_NONE, // pad to 9 buttons, or reorganize as 3x3 with a real 9th
-                    // color
+static const App_Color_ID picker_colors[8] = {
+    APP_COLOR_NONE,   APP_COLOR_WHITE, APP_COLOR_RED,  APP_COLOR_ORANGE,
+    APP_COLOR_YELLOW, APP_COLOR_GREEN, APP_COLOR_BLUE, APP_COLOR_VIOLET,
 };
 
 static void color_picker_event_cb(lv_event_t *lv_event) {
+  if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
+    return;
+
   lv_obj_t *bm = lv_event_get_target(lv_event);
   View_Base_t *self = lv_event_get_user_data(lv_event);
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self->ctx;
@@ -25,22 +25,21 @@ static void color_picker_event_cb(lv_event_t *lv_event) {
 }
 
 lv_obj_t *View_Color_Picker_Create(View_Base_t *self, lv_obj_t *parent) {
-  Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self->ctx;
-  Model_Color_Picker_t *model = presenter->model;
+  // Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t
+  // *)self->ctx; Model_Color_Picker_t *model = presenter->model;
 
-  static const char *map[11];
+  static const char *map[10];
 
-  map[0] = App_Color_Get_Entry(APP_COLOR_WHITE)->label;
-  map[1] = App_Color_Get_Entry(APP_COLOR_RED)->label;
-  map[2] = App_Color_Get_Entry(APP_COLOR_ORANGE)->label;
-  map[3] = "\n";
+  map[0] = App_Color_Get_Entry(APP_COLOR_NONE)->label;
+  map[1] = App_Color_Get_Entry(APP_COLOR_WHITE)->label;
+  map[2] = App_Color_Get_Entry(APP_COLOR_RED)->label;
+  map[3] = App_Color_Get_Entry(APP_COLOR_ORANGE)->label;
   map[4] = App_Color_Get_Entry(APP_COLOR_YELLOW)->label;
-  map[5] = App_Color_Get_Entry(APP_COLOR_GREEN)->label;
-  map[6] = App_Color_Get_Entry(APP_COLOR_BLUE)->label;
-  map[7] = "\n";
+  map[5] = "\n";
+  map[6] = App_Color_Get_Entry(APP_COLOR_GREEN)->label;
+  map[7] = App_Color_Get_Entry(APP_COLOR_BLUE)->label;
   map[8] = App_Color_Get_Entry(APP_COLOR_VIOLET)->label;
-  map[9] = App_Color_Get_Entry(APP_COLOR_GRAY)->label;
-  map[10] = "";
+  map[9] = "";
 
   lv_obj_t *bm = lv_buttonmatrix_create(parent);
   lv_obj_set_size(bm, 320, 240);
@@ -53,6 +52,8 @@ lv_obj_t *View_Color_Picker_Create(View_Base_t *self, lv_obj_t *parent) {
   lv_obj_add_flag(bm, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
   lv_obj_add_event_cb(bm, draw_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);
   lv_obj_add_event_cb(bm, color_picker_event_cb, LV_EVENT_VALUE_CHANGED, self);
+  // lv_obj_add_event_cb(bm, color_picker_event_cb, LV_EVENT_VALUE_CHANGED,
+  // self);
 
   return bm;
 }
@@ -75,5 +76,5 @@ static void draw_cb(lv_event_t *lv_event) {
   }
 
   fill->color =
-      View_Helper_Get_LV_Color(App_Color_Get_Entry(draw_base->id1)->color_id);
+      UI_Helper_Get_LV_Color(App_Color_Get_Entry(draw_base->id1)->color_id);
 }

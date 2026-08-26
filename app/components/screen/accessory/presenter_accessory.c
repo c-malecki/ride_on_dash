@@ -9,6 +9,12 @@ static void led_headlight_observer_cb(lv_observer_t *observer,
   LED_SetHeadlights(color_id);
 }
 
+static void led_bodylight_observer_cb(lv_observer_t *observer,
+                                      lv_subject_t *subject) {
+  App_Color_ID color_id = (App_Color_ID)lv_subject_get_int(subject);
+  LED_SetBodylights(color_id);
+}
+
 void Presenter_Accessory_Create(Presenter_Accessory_t *presenter,
                                 Model_Accessory_t *model) {
   presenter->model = model;
@@ -27,9 +33,13 @@ void Presenter_Accessory_Init(Presenter_Base_t *self) {
   // saved_headlight_color_id);
   // }
 
-  // hardware observer
-  lv_subject_add_observer(&presenter->model->btn_color_headlights,
+  // hardware observers
+  lv_subject_add_observer(&presenter->model->btn_headlights_color,
                           led_headlight_observer_cb, NULL);
 
-  Model_Accessory_Set_Btn_Color_Headlights(presenter->model, APP_COLOR_GRAY);
+  lv_subject_add_observer(&presenter->model->btn_bodylights_color,
+                          led_bodylight_observer_cb, NULL);
+
+  Model_Accessory_Set_Btn_Color_Headlights(presenter->model, APP_COLOR_NONE);
+  Model_Accessory_Set_Btn_Color_Bodylights(presenter->model, APP_COLOR_NONE);
 }

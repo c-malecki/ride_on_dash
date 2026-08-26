@@ -8,11 +8,8 @@
 #include "esp_lcd_touch_xpt2046.h"
 #include "esp_timer.h"
 #include "lvgl.h"
+#include "navigator.h"
 //
-#include "model_accessory.h"
-#include "presenter_accessory.h"
-#include "view_accessory.h"
-#include "view_base.h"
 
 /* STATIC VARS */
 
@@ -21,9 +18,6 @@ static lv_indev_t *indev = NULL;
 static esp_lcd_panel_io_handle_t io_handle = NULL;
 static esp_lcd_panel_handle_t panel_handle = NULL;
 static esp_lcd_touch_handle_t touch_handle = NULL;
-
-static Model_Accessory_t model_accessory;
-static Presenter_Accessory_t presenter_accessory;
 
 /* FORWARD PROTO DEP */
 
@@ -37,13 +31,7 @@ esp_err_t App_LVGL_Setup(void) {
     return err;
   }
 
-  // setup models, views, presenters
-  Model_Accessory_Init(&model_accessory);
-  Presenter_Accessory_Create(&presenter_accessory, &model_accessory);
-  Presenter_Accessory_Init(&presenter_accessory.base);
-
-  static View_Base_t view_accessory = {.ctx = &presenter_accessory};
-  View_Accessory_Create(&view_accessory, lv_screen_active());
+  Navigator_Init();
 
   return ESP_OK;
 };
@@ -228,6 +216,10 @@ esp_err_t display_init(void) {
   }
 
   init_lvgl();
+
+  lv_obj_t *screen = lv_obj_create(NULL);
+  lv_obj_set_style_bg_color(screen, lv_color_hex(0xf7ffff), 0);
+  lv_screen_load(screen);
 
   return ESP_OK;
 }
