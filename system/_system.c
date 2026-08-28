@@ -1,10 +1,40 @@
 #include "_system.h"
+// drivers
 #include "led_driver.h"
+// controllers
+#include "led_controller.h"
 
 QueueHandle_t system_event_queue = NULL;
 
+esp_err_t init_drivers(void);
+esp_err_t init_controllers(void);
+
 esp_err_t System_Init(void) {
-  // drivers
+  system_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
+
+  esp_err_t err = init_drivers();
+  err = init_controllers();
+
+  return err;
+}
+
+// Handle routing bridge_event to intended controller
+void System_Event_Consume(Bridge_Event_t bridge_event) {
+  switch (bridge_event.sys_binding_id) {
+
+  case SYSTEM_BINDING_SET_STRIP_COLOR: {
+    LED_Controller_Handle_Bridge_Event(bridge_event);
+    break;
+  }
+
+  case SYSTEM_BINDING_NONE:
+    break;
+  }
+}
+
+/* */
+
+esp_err_t init_drivers(void) {
   esp_err_t err = LED_Init();
 
   // err = Sound_Init();
@@ -13,20 +43,11 @@ esp_err_t System_Init(void) {
   // err = Storage_Init();
   // ESP_ERROR_CHECK(err);
 
-  system_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
-
   return err;
 }
 
-void System_Event_Consume(Bridge_Event_t bridge_event) {
-  switch (bridge_event.sys_binding_id) {
+esp_err_t init_controllers(void) {
+  esp_err_t err = LED_Controller_Init(LED_Driver_Get_Set_Strip_Color_CB());
 
-  case SYSTEM_BINDING_SET_STRIP_COLOR: {
-    // TODO
-    break;
-  }
-
-  case SYSTEM_BINDING_NONE:
-    break;
-  }
+  return err;
 }

@@ -69,10 +69,10 @@ esp_err_t LED_Init(void) {
   return led_strip_new_rmt_device(&blr_config, &rmt_config, &strip_blr_handle);
 }
 
-void LED_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
-  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
+static void led_driver_set_strip_color(LED_Set_Strip_Color_Arg_t *arg) {
+  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(arg->color_id);
 
-  switch (strip_id) {
+  switch (arg->strip_id) {
   case LED_STRIP_HEADLIGHTS: {
 
     led_strip_clear(strip_hll_handle);
@@ -106,4 +106,8 @@ void LED_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
   case LED_STRIP_NONE:
     break;
   }
+}
+
+LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void) {
+  return &led_driver_set_strip_color;
 }

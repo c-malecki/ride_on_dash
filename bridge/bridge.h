@@ -18,13 +18,13 @@ typedef enum {
 typedef struct {
   System_Binding_ID sys_binding_id;
   App_Binding_ID app_binding_id;
-  uint32_t payload;
+  void *payload;
 } Bridge_Event_t;
 
 // void Bridge_Queue_Init(void);
 // void Bridge_Event_Consume(Bridge_Event_t bridge_event);
 Bridge_Event_t Bridge_Event_Create(System_Binding_ID sys_binding_id,
                                    App_Binding_ID app_binding_id,
-                                   uint32_t payload);
+                                   void *payload);
 
 #endif // __BRIDGE_H_

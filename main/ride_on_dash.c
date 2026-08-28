@@ -4,7 +4,6 @@
 #include "freertos/idf_additions.h"
 #include "freertos/semphr.h"
 #include "lvgl.h"
-#include "portmacro.h"
 
 static SemaphoreHandle_t lvgl_mutex = NULL;
 
@@ -48,10 +47,10 @@ static void app_task(void *arg) {
 }
 
 void app_main(void) {
+  lvgl_mutex = xSemaphoreCreateMutex();
+
   esp_err_t err = System_Init();
   ESP_ERROR_CHECK(err);
-
-  lvgl_mutex = xSemaphoreCreateMutex();
 
   err = App_Init();
   ESP_ERROR_CHECK(err);
