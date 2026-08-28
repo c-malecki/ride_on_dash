@@ -1,6 +1,6 @@
 #include "navigator.h"
 #include "ui_helpers.h"
-//
+// MVP stuff
 #include "model_accessory.h"
 #include "model_color_picker.h"
 #include "presenter_accessory.h"

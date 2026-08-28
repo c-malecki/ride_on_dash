@@ -9,6 +9,8 @@
 #include "navigator.h"
 //
 
+QueueHandle_t app_event_queue = NULL;
+
 /* STATIC VARS */
 
 static lv_display_t *disp = NULL;
@@ -23,7 +25,7 @@ esp_err_t display_init(void);
 
 /* INTERFACE */
 
-esp_err_t App_LVGL_Setup(void) {
+esp_err_t App_Init(void) {
   esp_err_t err = display_init();
   if (err != ESP_OK) {
     return err;
@@ -31,8 +33,25 @@ esp_err_t App_LVGL_Setup(void) {
 
   Navigator_Init();
 
+  app_event_queue = xQueueCreate(10, sizeof(App_Event_t));
+
   return ESP_OK;
 };
+
+void App_Consume_Event(App_Event_t app_event) {
+  switch (app_event.binding_id) {
+
+  case APP_BINDING_NONE:
+    break;
+  }
+}
+
+App_Event_t App_Event_Create(App_Binding_ID binding_id, uint32_t payload) {
+  return (App_Event_t){
+      .binding_id = binding_id,
+      .payload = payload,
+  };
+}
 
 /* LVGL APP SETUP */
 
