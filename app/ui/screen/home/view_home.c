@@ -1,6 +1,6 @@
 #include "view_home.h"
 // #include "presenter_home.h"
-#include "ui_helpers.h"
+#include "style.h"
 
 static void on_nav_btn_press(lv_event_t *lv_event) {
   if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
@@ -18,7 +18,7 @@ void View_Home_Create(View_Base_t *self, lv_obj_t *parent) {
   self->destroy = View_Home_Destroy;
   // Presenter_Home_t *presenter = (Presenter_Home_t *)self->ctx;
 
-  lv_obj_t *grid = UI_Helper_Create_Grid(parent, UI_HELPER_GRID_3x2);
+  lv_obj_t *grid = UI_Style_Create_Grid(parent, UI_STYLE_GRID_3x2);
 
   // light select button
   lv_obj_t *light_select_btn = lv_button_create(grid);
@@ -30,7 +30,7 @@ void View_Home_Create(View_Base_t *self, lv_obj_t *parent) {
   lv_obj_add_event_cb(light_select_btn, on_nav_btn_press, LV_EVENT_CLICKED,
                       self);
 
-  lv_color_t light_select_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
+  lv_color_t light_select_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
 
   // light select label

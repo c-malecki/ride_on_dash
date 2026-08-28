@@ -1,7 +1,7 @@
 #include "view_color_picker.h"
 #include "_color.h"
 #include "presenter_color_picker.h"
-#include "ui_helpers.h"
+#include "style.h"
 
 static void draw_cb(lv_event_t *lv_event);
 
@@ -78,5 +78,5 @@ static void draw_cb(lv_event_t *lv_event) {
   }
 
   fill->color =
-      UI_Helper_Get_LV_Color(CFG_Color_Find_Entry(draw_base->id1)->color_id);
+      UI_Style_Get_LV_Color(CFG_Color_Find_Entry(draw_base->id1)->color_id);
 }

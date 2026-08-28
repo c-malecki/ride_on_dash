@@ -6,8 +6,12 @@
 
 QueueHandle_t system_event_queue = NULL;
 
+/* FORWARD PROTO DEP */
+
 esp_err_t init_drivers(void);
 esp_err_t init_controllers(void);
+
+/* INTERFACE */
 
 esp_err_t System_Init(void) {
   system_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
@@ -22,17 +26,17 @@ esp_err_t System_Init(void) {
 void System_Event_Consume(Bridge_Event_t bridge_event) {
   switch (bridge_event.sys_binding_id) {
 
-  case SYSTEM_BINDING_SET_STRIP_COLOR: {
+  case BINDING_SYSTEM_SET_LED_STRIP_COLOR: {
     LED_Controller_Handle_Bridge_Event(bridge_event);
     break;
   }
 
-  case SYSTEM_BINDING_NONE:
+  case BINDING_SYSTEM_NONE:
     break;
   }
 }
 
-/* */
+/* SETUP */
 
 esp_err_t init_drivers(void) {
   esp_err_t err = LED_Init();

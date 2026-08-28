@@ -1,5 +1,4 @@
-#include "navigator.h"
-#include "ui_helpers.h"
+#include "engine.h"
 // MVP stuff
 #include "model_accessory.h"
 #include "model_color_picker.h"
@@ -21,7 +20,7 @@ static Presenter_Accessory_t presenter_accessory;
 static Model_Color_Picker_t model_color_picker;
 static Presenter_Color_Picker_t presenter_color_picker;
 
-void Navigator_Init(void) {
+void UI_Engine_Init(void) {
   Presenter_Home_Create(&presenter_home);
   Presenter_Home_Init(&presenter_home.base);
 
@@ -35,15 +34,15 @@ void Navigator_Init(void) {
                                 NULL);
   Presenter_Color_Picker_Init(&presenter_color_picker.base);
 
-  Navigator_Load_Screen(UI_SCREEN_ID_HOME);
+  UI_Engine_Load_Screen(UI_SCREEN_ID_HOME);
 }
 
-void Navigator_Load_Screen(UI_Screen_ID screen_id) {
+void UI_Engine_Load_Screen(UI_Screen_ID screen_id) {
   if (current_screen.destroy) {
     current_screen.destroy(&current_screen);
   }
 
-  current_screen = (View_Base_t){.navigate = Navigator_Load_Screen};
+  current_screen = (View_Base_t){.navigate = UI_Engine_Load_Screen};
 
   switch (screen_id) {
   case UI_SCREEN_ID_HOME: {

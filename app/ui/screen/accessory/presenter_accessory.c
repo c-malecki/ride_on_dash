@@ -1,18 +1,17 @@
 #include "presenter_accessory.h"
 #include "_color.h"
-#include "led_driver.h"
 #include "model_accessory.h"
 
 static void led_headlight_observer_cb(lv_observer_t *observer,
                                       lv_subject_t *subject) {
-  Color_ID color_id = (Color_ID)lv_subject_get_int(subject);
-  LED_Set_Strip_Color(LED_STRIP_HEADLIGHTS, color_id);
+  // Color_ID color_id = (Color_ID)lv_subject_get_int(subject);
+  // LED_Set_Strip_Color(LED_STRIP_HEADLIGHTS, color_id);
 }
 
 static void led_bodylight_observer_cb(lv_observer_t *observer,
                                       lv_subject_t *subject) {
-  Color_ID color_id = (Color_ID)lv_subject_get_int(subject);
-  LED_Set_Strip_Color(LED_STRIP_BODYLIGHTS, color_id);
+  // Color_ID color_id = (Color_ID)lv_subject_get_int(subject);
+  // LED_Set_Strip_Color(LED_STRIP_BODYLIGHTS, color_id);
 }
 
 void Presenter_Accessory_Create(Presenter_Accessory_t *presenter,

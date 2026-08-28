@@ -1,12 +1,17 @@
 #include "app.h"
-#include "esp_err.h"
+#include "binding.h"
+#include "hardware.h"
+// drivers
 #include "esp_lcd_ili9341.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_touch_xpt2046.h"
+// libs
+#include "esp_err.h"
 #include "esp_timer.h"
-#include "hardware.h"
-#include "navigator.h"
+#include "lvgl.h"
+//
+#include "engine.h"
 
 QueueHandle_t app_event_queue = NULL;
 
@@ -30,7 +35,7 @@ esp_err_t App_Init(void) {
     return err;
   }
 
-  Navigator_Init();
+  UI_Engine_Init();
 
   app_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
 
@@ -40,7 +45,12 @@ esp_err_t App_Init(void) {
 void App_Event_Consume(Bridge_Event_t bridge_event) {
   switch (bridge_event.app_binding_id) {
 
-  case APP_BINDING_NONE:
+  case BINDING_APP_SET_LED_UI_COLOR: {
+    // TODO: UI model binding
+    break;
+  }
+
+  case BINDING_APP_NONE:
     break;
   }
 }

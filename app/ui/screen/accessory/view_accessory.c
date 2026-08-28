@@ -1,7 +1,7 @@
 #include "view_accessory.h"
 // #include "model_accessory.h"
 // #include "presenter_accessory.h"
-#include "ui_helpers.h"
+#include "style.h"
 #include "view_base.h"
 
 static void on_nav_btn_press(lv_event_t *lv_event) {
@@ -18,7 +18,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
   // Model_Accessory_t *model = presenter->model;
 
   // layout
-  lv_obj_t *grid = UI_Helper_Create_Grid(parent, UI_HELPER_GRID_2x1);
+  lv_obj_t *grid = UI_Style_Create_Grid(parent, UI_STYLE_GRID_2x1);
 
   // headlights button
   lv_obj_t *headlight_btn = lv_button_create(grid);
@@ -29,7 +29,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
                        LV_GRID_ALIGN_CENTER, 0, 1);
   lv_obj_add_event_cb(headlight_btn, on_nav_btn_press, LV_EVENT_CLICKED, self);
 
-  lv_color_t hl_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
+  lv_color_t hl_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(headlight_btn, hl_btn_color, 0);
 
   // headlights label
@@ -47,7 +47,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
                        LV_GRID_ALIGN_CENTER, 0, 1);
   lv_obj_add_event_cb(bodylight_btn, on_nav_btn_press, LV_EVENT_CLICKED, self);
 
-  lv_color_t bl_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
+  lv_color_t bl_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(bodylight_btn, bl_btn_color, 0);
 
   // bodylights label
