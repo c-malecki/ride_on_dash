@@ -1,7 +1,6 @@
 idf_component_register(
     SRCS "ride_on_dash.c"
         "../app/app.c"
-        "../app/util.c"
         "../app/ui/navigator.c"
         "../app/ui/ui_helpers.c"
         "../app/ui/view/home/presenter_home.c"
@@ -12,6 +11,7 @@ idf_component_register(
         "../app/ui/view/color_picker/model_color_picker.c"
         "../app/ui/view/color_picker/presenter_color_picker.c"
         "../app/ui/view/color_picker/view_color_picker.c"
+        "../bridge/util.c"
         "../system/_system.c"
         "../system/controller/led_controller.c"
         "../system/driver/led_driver.c"
@@ -21,6 +21,7 @@ idf_component_register(
         "../app/ui/view/home"
         "../app/ui/view/accessory"
         "../app/ui/view/color_picker"
+        "../bridge"
         "../system"
         "../system/controller"
         "../system/driver"

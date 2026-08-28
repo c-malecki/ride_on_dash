@@ -1,5 +1,4 @@
 #include "navigator.h"
-#include "led_controller.h"
 #include "ui_helpers.h"
 //
 #include "model_accessory.h"
@@ -32,7 +31,8 @@ void Navigator_Init(void) {
 
   Model_Color_Picker_Init(&model_color_picker);
   Presenter_Color_Picker_Create(&presenter_color_picker, &model_color_picker,
-                                LED_Controller_Binding_Set_Strip_CB(), NULL);
+                                // LED_Controller_Binding_Set_Strip_CB(),
+                                NULL);
   Presenter_Color_Picker_Init(&presenter_color_picker.base);
 
   Navigator_Load_Screen(UI_SCREEN_ID_HOME);
