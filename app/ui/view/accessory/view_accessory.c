@@ -29,7 +29,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
                        LV_GRID_ALIGN_CENTER, 0, 1);
   lv_obj_add_event_cb(headlight_btn, on_nav_btn_press, LV_EVENT_CLICKED, self);
 
-  lv_color_t hl_btn_color = UI_Helper_Get_LV_Color(UTIL_COLOR_YELLOW);
+  lv_color_t hl_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(headlight_btn, hl_btn_color, 0);
 
   // headlights label
@@ -47,7 +47,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
                        LV_GRID_ALIGN_CENTER, 0, 1);
   lv_obj_add_event_cb(bodylight_btn, on_nav_btn_press, LV_EVENT_CLICKED, self);
 
-  lv_color_t bl_btn_color = UI_Helper_Get_LV_Color(UTIL_COLOR_YELLOW);
+  lv_color_t bl_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(bodylight_btn, bl_btn_color, 0);
 
   // bodylights label
@@ -62,7 +62,7 @@ void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
 static Model_Color_Picker_t model_color_picker;
 static Presenter_Color_Picker_t presenter_color_picker;
 
-static void inj_color_picker_cb(Util_Color_ID color_id) {}
+static void inj_color_picker_cb(Color_ID color_id) {}
 
 static void on_bodylight_btn_press(lv_event_t *lv_event) {
   if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
@@ -77,7 +77,7 @@ static void on_bodylight_btn_press(lv_event_t *lv_event) {
   Model_Accessory_Set_Show_Color_Picker(presenter->model, true);
 }
 
-static void on_color_selected(void *ctx, Util_Color_ID color_id) {
+static void on_color_selected(void *ctx, Color_ID color_id) {
   Presenter_Accessory_t *presenter = (Presenter_Accessory_t *)ctx;
 
   Model_Accessory_LED selected_light =

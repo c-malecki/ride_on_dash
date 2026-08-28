@@ -1,8 +1,8 @@
 #include "led_driver.h"
-#include "config.h"
+#include "_color.h"
+#include "hardware.h"
 #include "led_strip.h"
 #include "led_strip_types.h"
-#include "util.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -69,8 +69,8 @@ esp_err_t LED_Init(void) {
   return led_strip_new_rmt_device(&blr_config, &rmt_config, &strip_blr_handle);
 }
 
-void LED_Set_Strip_Color(LED_Strip_ID strip_id, Util_Color_ID color_id) {
-  const Util_Color_Table_Entry_t *color = UTIL_Get_Color(color_id);
+void LED_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
+  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
 
   switch (strip_id) {
   case LED_STRIP_HEADLIGHTS: {

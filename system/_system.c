@@ -13,13 +13,13 @@ esp_err_t System_Init(void) {
   // err = Storage_Init();
   // ESP_ERROR_CHECK(err);
 
-  system_event_queue = xQueueCreate(10, sizeof(System_Event_t));
+  system_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
 
   return err;
 }
 
-void System_Consume_Event(System_Event_t system_event) {
-  switch (system_event.binding_id) {
+void System_Event_Consume(Bridge_Event_t bridge_event) {
+  switch (bridge_event.sys_binding_id) {
 
   case SYSTEM_BINDING_SET_STRIP_COLOR: {
     // TODO
@@ -29,12 +29,4 @@ void System_Consume_Event(System_Event_t system_event) {
   case SYSTEM_BINDING_NONE:
     break;
   }
-}
-
-System_Event_t System_Event_Create(System_Binding_ID binding_id,
-                                   uint32_t payload) {
-  return (System_Event_t){
-      .binding_id = binding_id,
-      .payload = payload,
-  };
 }

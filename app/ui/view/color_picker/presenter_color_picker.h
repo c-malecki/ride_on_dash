@@ -17,6 +17,6 @@ void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
                                    void *on_select_ctx);
 void Presenter_Color_Picker_Init(Presenter_Base_t *self);
 void Presenter_Color_Picker_Select(Presenter_Color_Picker_t *presenter,
-                                   Util_Color_ID color_id);
+                                   Color_ID color_id);
 
 #endif // __PRESENTER_COLOR_PICKER_H_

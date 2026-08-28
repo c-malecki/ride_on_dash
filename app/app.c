@@ -1,13 +1,12 @@
 #include "app.h"
-#include "config.h"
 #include "esp_err.h"
 #include "esp_lcd_ili9341.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_touch_xpt2046.h"
 #include "esp_timer.h"
+#include "hardware.h"
 #include "navigator.h"
-//
 
 QueueHandle_t app_event_queue = NULL;
 
@@ -33,24 +32,17 @@ esp_err_t App_Init(void) {
 
   Navigator_Init();
 
-  app_event_queue = xQueueCreate(10, sizeof(App_Event_t));
+  app_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
 
   return ESP_OK;
 };
 
-void App_Consume_Event(App_Event_t app_event) {
-  switch (app_event.binding_id) {
+void App_Event_Consume(Bridge_Event_t bridge_event) {
+  switch (bridge_event.app_binding_id) {
 
   case APP_BINDING_NONE:
     break;
   }
-}
-
-App_Event_t App_Event_Create(App_Binding_ID binding_id, uint32_t payload) {
-  return (App_Event_t){
-      .binding_id = binding_id,
-      .payload = payload,
-  };
 }
 
 /* LVGL APP SETUP */

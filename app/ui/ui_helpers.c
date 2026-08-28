@@ -1,4 +1,5 @@
 #include "ui_helpers.h"
+#include "_color.h"
 
 const lv_style_const_prop_t style_grid_props[] = {
     LV_STYLE_CONST_WIDTH(320),
@@ -18,8 +19,8 @@ const int32_t grid_rows_1[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 const int32_t grid_rows_2[] = {LV_GRID_FR(1), LV_GRID_FR(1),
                                LV_GRID_TEMPLATE_LAST};
 
-lv_color_t UI_Helper_Get_LV_Color(Util_Color_ID color_id) {
-  const Util_Color_Table_Entry_t *color = UTIL_Get_Color(color_id);
+lv_color_t UI_Helper_Get_LV_Color(Color_ID color_id) {
+  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
   return lv_color_make(color->color->r, color->color->g, color->color->b);
 }
 

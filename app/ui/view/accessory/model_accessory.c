@@ -1,13 +1,13 @@
 #include "model_accessory.h"
+#include "_color.h"
 #include "core/lv_observer.h"
-#include "util.h"
 #include <stdbool.h>
 
 void Model_Accessory_Init(Model_Accessory_t *model) {
   lv_subject_init_int(&model->color_picker_show, false);
   lv_subject_init_int(&model->selected_lights, MODEL_ACCESSORY_LED_NONE);
-  lv_subject_init_int(&model->btn_headlights_color, UTIL_COLOR_NONE);
-  lv_subject_init_int(&model->btn_bodylights_color, UTIL_COLOR_NONE);
+  lv_subject_init_int(&model->btn_headlights_color, COLOR_NONE);
+  lv_subject_init_int(&model->btn_bodylights_color, COLOR_NONE);
 }
 
 void Model_Accessory_Set_Show_Color_Picker(Model_Accessory_t *model,
@@ -26,11 +26,11 @@ void Model_Accessory_Set_Selected_Lights(Model_Accessory_t *model,
 }
 
 void Model_Accessory_Set_Btn_Color_Headlights(Model_Accessory_t *model,
-                                              Util_Color_ID color_id) {
+                                              Color_ID color_id) {
   lv_subject_set_int(&model->btn_headlights_color, color_id);
 }
 
 void Model_Accessory_Set_Btn_Color_Bodylights(Model_Accessory_t *model,
-                                              Util_Color_ID color_id) {
+                                              Color_ID color_id) {
   lv_subject_set_int(&model->btn_bodylights_color, color_id);
 }

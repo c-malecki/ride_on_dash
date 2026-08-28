@@ -30,7 +30,7 @@ void View_Home_Create(View_Base_t *self, lv_obj_t *parent) {
   lv_obj_add_event_cb(light_select_btn, on_nav_btn_press, LV_EVENT_CLICKED,
                       self);
 
-  lv_color_t light_select_btn_color = UI_Helper_Get_LV_Color(UTIL_COLOR_YELLOW);
+  lv_color_t light_select_btn_color = UI_Helper_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
 
   // light select label

@@ -1,13 +1,13 @@
 #include "view_color_picker.h"
+#include "_color.h"
 #include "presenter_color_picker.h"
 #include "ui_helpers.h"
-#include "util.h"
 
 static void draw_cb(lv_event_t *lv_event);
 
-static const Util_Color_ID picker_colors[8] = {
-    UTIL_COLOR_NONE,   UTIL_COLOR_WHITE, UTIL_COLOR_RED,  UTIL_COLOR_ORANGE,
-    UTIL_COLOR_YELLOW, UTIL_COLOR_GREEN, UTIL_COLOR_BLUE, UTIL_COLOR_VIOLET,
+static const Color_ID picker_colors[8] = {
+    COLOR_NONE,   COLOR_WHITE, COLOR_RED,  COLOR_ORANGE,
+    COLOR_YELLOW, COLOR_GREEN, COLOR_BLUE, COLOR_VIOLET,
 };
 
 static void color_picker_select_event_cb(lv_event_t *lv_event) {
@@ -19,7 +19,7 @@ static void color_picker_select_event_cb(lv_event_t *lv_event) {
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self->ctx;
 
   uint32_t idx = lv_buttonmatrix_get_selected_button(bm);
-  Util_Color_ID color_id = picker_colors[idx];
+  Color_ID color_id = picker_colors[idx];
 
   // handles communicating to hardware system controllers
   Presenter_Color_Picker_Select(presenter, color_id);
@@ -31,15 +31,15 @@ lv_obj_t *View_Color_Picker_Create(View_Base_t *self, lv_obj_t *parent) {
 
   static const char *map[10];
 
-  map[0] = UTIL_Get_Color(UTIL_COLOR_NONE)->label;
-  map[1] = UTIL_Get_Color(UTIL_COLOR_WHITE)->label;
-  map[2] = UTIL_Get_Color(UTIL_COLOR_RED)->label;
-  map[3] = UTIL_Get_Color(UTIL_COLOR_ORANGE)->label;
-  map[4] = UTIL_Get_Color(UTIL_COLOR_YELLOW)->label;
+  map[0] = CFG_Color_Find_Entry(COLOR_NONE)->label;
+  map[1] = CFG_Color_Find_Entry(COLOR_WHITE)->label;
+  map[2] = CFG_Color_Find_Entry(COLOR_RED)->label;
+  map[3] = CFG_Color_Find_Entry(COLOR_ORANGE)->label;
+  map[4] = CFG_Color_Find_Entry(COLOR_YELLOW)->label;
   map[5] = "\n";
-  map[6] = UTIL_Get_Color(UTIL_COLOR_GREEN)->label;
-  map[7] = UTIL_Get_Color(UTIL_COLOR_BLUE)->label;
-  map[8] = UTIL_Get_Color(UTIL_COLOR_VIOLET)->label;
+  map[6] = CFG_Color_Find_Entry(COLOR_GREEN)->label;
+  map[7] = CFG_Color_Find_Entry(COLOR_BLUE)->label;
+  map[8] = CFG_Color_Find_Entry(COLOR_VIOLET)->label;
   map[9] = "";
 
   lv_obj_t *bm = lv_buttonmatrix_create(parent);
@@ -68,7 +68,7 @@ static void draw_cb(lv_event_t *lv_event) {
     return;
   }
   // id1 should be the idx of the btn in the map
-  if (draw_base->id1 >= UTIL_COLOR_COUNT) {
+  if (draw_base->id1 >= COLOR_COUNT) {
     return;
   }
 
@@ -78,5 +78,5 @@ static void draw_cb(lv_event_t *lv_event) {
   }
 
   fill->color =
-      UI_Helper_Get_LV_Color(UTIL_Get_Color(draw_base->id1)->color_id);
+      UI_Helper_Get_LV_Color(CFG_Color_Find_Entry(draw_base->id1)->color_id);
 }

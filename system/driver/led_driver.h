@@ -1,8 +1,8 @@
 #ifndef __LED_DRIVER_H_
 #define __LED_DRIVER_H_
 
+#include "_color.h"
 #include "esp_err.h"
-#include "util.h"
 #include <stdbool.h>
 
 typedef enum {
@@ -12,6 +12,6 @@ typedef enum {
 } LED_Strip_ID;
 
 esp_err_t LED_Init(void);
-void LED_Set_Strip_Color(LED_Strip_ID strip_id, Util_Color_ID color_id);
+void LED_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id);
 
 #endif // __LED_DRIVER_H_

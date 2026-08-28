@@ -1,8 +1,8 @@
 #ifndef __UI_HELPERS_H_
 #define __UI_HELPERS_H_
 
+#include "_color.h"
 #include "lvgl.h"
-#include "util.h"
 
 typedef enum {
   UI_SCREEN_ID_NONE = 0,
@@ -17,7 +17,7 @@ typedef enum {
   UI_HELPER_GRID_3x2,
 } UI_Helper_Grid_ID;
 
-lv_color_t UI_Helper_Get_LV_Color(Util_Color_ID color_id);
+lv_color_t UI_Helper_Get_LV_Color(Color_ID color_id);
 
 lv_obj_t *UI_Helper_Create_Grid(lv_obj_t *parent, UI_Helper_Grid_ID grid_id);
 

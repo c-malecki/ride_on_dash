@@ -1,7 +1,6 @@
 #include "_system.h"
 #include "app.h"
 #include "esp_err.h"
-#include "freertos/FreeRTOS.h"
 #include "freertos/idf_additions.h"
 #include "freertos/semphr.h"
 #include "lvgl.h"
@@ -9,19 +8,11 @@
 
 static SemaphoreHandle_t lvgl_mutex = NULL;
 
-static void lvgl_app_task(void *arg) {
+static void lvgl_timer_task(void *arg) {
   const TickType_t period = pdMS_TO_TICKS(10);
   TickType_t last_wake = xTaskGetTickCount();
 
   while (1) {
-    // TODO: CHECK IF THIS IS POSSIBLE
-    App_Event_t app_event;
-    if (xQueueReceive(app_event_queue, &app_event, portMAX_DELAY)) {
-      App_Consume_Event(app_event);
-    }
-
-    // WEE WOO WEE WOO ^^^^^^^^^^^
-
     xSemaphoreTake(lvgl_mutex, portMAX_DELAY);
     lv_timer_handler();
     xSemaphoreGive(lvgl_mutex);
@@ -39,10 +30,19 @@ static void lvgl_app_task(void *arg) {
 */
 
 static void system_task(void *arg) {
-  System_Event_t system_event;
+  Bridge_Event_t bridge_event;
   while (1) {
-    if (xQueueReceive(system_event_queue, &system_event, portMAX_DELAY)) {
-      System_Consume_Event(system_event);
+    if (xQueueReceive(system_event_queue, &bridge_event, portMAX_DELAY)) {
+      System_Event_Consume(bridge_event);
+    }
+  }
+}
+
+static void app_task(void *arg) {
+  Bridge_Event_t bridge_event;
+  while (1) {
+    if (xQueueReceive(app_event_queue, &bridge_event, portMAX_DELAY)) {
+      App_Event_Consume(bridge_event);
     }
   }
 }
@@ -56,8 +56,8 @@ void app_main(void) {
   err = App_Init();
   ESP_ERROR_CHECK(err);
 
-  xTaskCreatePinnedToCore(lvgl_app_task, "lvgl_app_task", 16384, NULL, 7, NULL,
-                          1);
+  xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl_timer_task", 16384, NULL, 7,
+                          NULL, 1);
 
   xTaskCreatePinnedToCore(system_task, "system_task", 8192, NULL, 5, NULL, 0);
 }

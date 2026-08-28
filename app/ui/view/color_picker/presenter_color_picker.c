@@ -1,7 +1,7 @@
 #include "presenter_color_picker.h"
 // #include "esp_log.h"
+#include "_color.h"
 #include "model_color_picker.h"
-#include "util.h"
 
 void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
                                    Model_Color_Picker_t *model,
@@ -16,13 +16,13 @@ void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
 
 void Presenter_Color_Picker_Init(Presenter_Base_t *self) {
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self;
-  Model_Color_Picker_Set_Selected_Color(presenter->model, UTIL_COLOR_NONE);
+  Model_Color_Picker_Set_Selected_Color(presenter->model, COLOR_NONE);
 }
 
 void Presenter_Color_Picker_Select(Presenter_Color_Picker_t *presenter,
-                                   Util_Color_ID color_id) {
+                                   Color_ID color_id) {
   // if (presenter->on_select_cb) {
-  // typedef void (*LED_Controller_Set_Strip_CB)(LED_Strip_ID, Util_Color_ID)
+  // typedef void (*LED_Controller_Set_Strip_CB)(LED_Strip_ID, Color_ID)
   //   ESP_LOGI("PRESENTER_COLOR_PICKER", "deref presenter->on_select_ctx");
   //   LED_Strip_ID strip_id = *((LED_Strip_ID *)presenter->on_select_ctx);
   //   presenter->on_select_cb(strip_id, color_id);
