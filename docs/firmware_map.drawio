@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="9ByDVK2KQA2_E7IEXEf9">
+    <mxGraphModel dx="1661" dy="935" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="xLHOq6ftWdYDbbFwnfBb-11" edge="1" parent="1" source="xLHOq6ftWdYDbbFwnfBb-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="xLHOq6ftWdYDbbFwnfBb-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xLHOq6ftWdYDbbFwnfBb-8" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;" value="System" vertex="1">
+          <mxGeometry height="80" width="80" x="205" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xLHOq6ftWdYDbbFwnfBb-12" edge="1" parent="1" source="xLHOq6ftWdYDbbFwnfBb-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="xLHOq6ftWdYDbbFwnfBb-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xLHOq6ftWdYDbbFwnfBb-9" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;" value="App" vertex="1">
+          <mxGeometry height="80" width="80" x="205" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="xLHOq6ftWdYDbbFwnfBb-10" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;b&gt;Main&lt;/b&gt;&lt;br&gt;Tasks and queue for system and app" vertex="1">
+          <mxGeometry height="80" width="80" x="50" y="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

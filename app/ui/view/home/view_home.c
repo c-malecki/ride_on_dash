@@ -1,19 +1,22 @@
 #include "view_home.h"
-#include "esp_log.h"
-#include "presenter_home.h"
+// #include "presenter_home.h"
 #include "ui_helpers.h"
 
 static void on_nav_btn_press(lv_event_t *lv_event) {
   if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
     return;
-  ESP_LOGI("HOME", "on_nav_btn_press");
   View_Base_t *self = lv_event_get_user_data(lv_event);
-  ESP_LOGI("HOME", "self->navigate");
   self->navigate(UI_SCREEN_ID_ACCESSORY);
 }
 
+static void View_Home_Destroy(View_Base_t *self) {
+  lv_obj_clean(lv_screen_active());
+}
+
 void View_Home_Create(View_Base_t *self, lv_obj_t *parent) {
-  Presenter_Home_t *presenter = (Presenter_Home_t *)self->ctx;
+  self->create = View_Home_Create;
+  self->destroy = View_Home_Destroy;
+  // Presenter_Home_t *presenter = (Presenter_Home_t *)self->ctx;
 
   lv_obj_t *grid = UI_Helper_Create_Grid(parent, UI_HELPER_GRID_3x2);
 
@@ -27,7 +30,7 @@ void View_Home_Create(View_Base_t *self, lv_obj_t *parent) {
   lv_obj_add_event_cb(light_select_btn, on_nav_btn_press, LV_EVENT_CLICKED,
                       self);
 
-  lv_color_t light_select_btn_color = UI_Helper_Get_LV_Color(APP_COLOR_YELLOW);
+  lv_color_t light_select_btn_color = UI_Helper_Get_LV_Color(UTIL_COLOR_YELLOW);
   lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
 
   // light select label

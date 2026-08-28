@@ -1,10 +1,13 @@
 #include "presenter_color_picker.h"
+#include "esp_log.h"
+#include "led_controller.h"
+#include "led_driver.h"
 #include "model_color_picker.h"
 #include "util.h"
 
 void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
                                    Model_Color_Picker_t *model,
-                                   Color_Picker_Select_Cb on_select_cb,
+                                   LED_Controller_Set_Strip_CB on_select_cb,
                                    void *on_select_ctx) {
   presenter->model = model;
   presenter->on_select_cb = on_select_cb;
@@ -15,15 +18,18 @@ void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
 
 void Presenter_Color_Picker_Init(Presenter_Base_t *self) {
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self;
-  Model_Color_Picker_Set_Color(presenter->model, APP_COLOR_NONE);
+  Model_Color_Picker_Set_Selected_Color(presenter->model, UTIL_COLOR_NONE);
 }
 
 void Presenter_Color_Picker_Select(Presenter_Color_Picker_t *presenter,
-                                   App_Color_ID color_id) {
+                                   Util_Color_ID color_id) {
   if (presenter->on_select_cb) {
-    presenter->on_select_cb(presenter->on_select_ctx, color_id);
+    // typedef void (*LED_Controller_Set_Strip_CB)(LED_Strip_ID, Util_Color_ID)
+    ESP_LOGI("PRESENTER_COLOR_PICKER", "deref presenter->on_select_ctx");
+    LED_Strip_ID strip_id = *((LED_Strip_ID *)presenter->on_select_ctx);
+    presenter->on_select_cb(strip_id, color_id);
   }
   // optional: only needed if the picker itself
   // highlights the current selection
-  // Model_Color_Picker_Set_Color(presenter->model, color_id);
+  // Model_Color_Picker_Set_Selected_Color(presenter->model, color_id);
 }

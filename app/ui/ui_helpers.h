@@ -8,6 +8,7 @@ typedef enum {
   UI_SCREEN_ID_NONE = 0,
   UI_SCREEN_ID_HOME,
   UI_SCREEN_ID_ACCESSORY,
+  UI_SCREEN_ID_COLOR_PICKER,
 } UI_Screen_ID;
 
 typedef enum {
@@ -16,7 +17,7 @@ typedef enum {
   UI_HELPER_GRID_3x2,
 } UI_Helper_Grid_ID;
 
-lv_color_t UI_Helper_Get_LV_Color(App_Color_ID app_color_id);
+lv_color_t UI_Helper_Get_LV_Color(Util_Color_ID color_id);
 
 lv_obj_t *UI_Helper_Create_Grid(lv_obj_t *parent, UI_Helper_Grid_ID grid_id);
 

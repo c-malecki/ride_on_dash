@@ -4,31 +4,31 @@
 #include <stdint.h>
 
 typedef enum {
-  APP_COLOR_NONE = 0,
-  APP_COLOR_WHITE,
-  APP_COLOR_RED,
-  APP_COLOR_ORANGE,
-  APP_COLOR_YELLOW,
-  APP_COLOR_GREEN,
-  APP_COLOR_BLUE,
-  APP_COLOR_VIOLET,
-  APP_COLOR_GRAY,
-  APP_COLOR_COUNT,
-} App_Color_ID;
+  UTIL_COLOR_NONE = 0,
+  UTIL_COLOR_WHITE,
+  UTIL_COLOR_RED,
+  UTIL_COLOR_ORANGE,
+  UTIL_COLOR_YELLOW,
+  UTIL_COLOR_GREEN,
+  UTIL_COLOR_BLUE,
+  UTIL_COLOR_VIOLET,
+  UTIL_COLOR_GRAY,
+  UTIL_COLOR_COUNT,
+} Util_Color_ID;
 
 typedef struct {
   uint8_t r;
   uint8_t g;
   uint8_t b;
-} App_Color_t;
+} Util_Color_t;
 
 typedef struct {
-  App_Color_ID color_id;
-  const App_Color_t *color;
+  Util_Color_ID color_id;
+  const Util_Color_t *color;
   const char *label;
-} App_Color_Table_Entry_t;
+} Util_Color_Table_Entry_t;
 
-const App_Color_Table_Entry_t *App_Color_Get_Entry(App_Color_ID color_id);
-uint8_t App_Color_Get_Count(void);
+const Util_Color_Table_Entry_t *UTIL_Get_Color(Util_Color_ID color_id);
+uint8_t Util_Color_Get_Count(void);
 
 #endif // __UTIL_H_

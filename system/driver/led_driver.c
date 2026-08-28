@@ -1,4 +1,4 @@
-#include "led.h"
+#include "led_driver.h"
 #include "config.h"
 #include "led_strip.h"
 #include "led_strip_types.h"
@@ -49,34 +49,6 @@ static const led_strip_rmt_config_t rmt_config = {
     .flags.with_dma = false,
 };
 
-void strip_set_color(bool is_headlights, App_Color_ID app_color_id) {
-  const App_Color_Table_Entry_t *color = App_Color_Get_Entry(app_color_id);
-
-  if (is_headlights) {
-    led_strip_clear(strip_hll_handle);
-    led_strip_clear(strip_hlr_handle);
-    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_hll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_hlr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-    }
-    led_strip_refresh(strip_hll_handle);
-    led_strip_refresh(strip_hlr_handle);
-  } else {
-    led_strip_clear(strip_bll_handle);
-    led_strip_clear(strip_blr_handle);
-    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_bll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_blr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-    }
-    led_strip_refresh(strip_bll_handle);
-    led_strip_refresh(strip_blr_handle);
-  }
-}
-
 esp_err_t LED_Init(void) {
   esp_err_t err =
       led_strip_new_rmt_device(&hll_config, &rmt_config, &strip_hll_handle);
@@ -97,10 +69,41 @@ esp_err_t LED_Init(void) {
   return led_strip_new_rmt_device(&blr_config, &rmt_config, &strip_blr_handle);
 }
 
-void LED_SetHeadlights(App_Color_ID app_color_id) {
-  strip_set_color(true, app_color_id);
-}
+void LED_Set_Strip_Color(LED_Strip_ID strip_id, Util_Color_ID color_id) {
+  const Util_Color_Table_Entry_t *color = UTIL_Get_Color(color_id);
 
-void LED_SetBodylights(App_Color_ID app_color_id) {
-  strip_set_color(false, app_color_id);
+  switch (strip_id) {
+  case LED_STRIP_HEADLIGHTS: {
+
+    led_strip_clear(strip_hll_handle);
+    led_strip_clear(strip_hlr_handle);
+    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
+      led_strip_set_pixel(strip_hll_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+      led_strip_set_pixel(strip_hlr_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+    }
+    led_strip_refresh(strip_hll_handle);
+    led_strip_refresh(strip_hlr_handle);
+    break;
+  }
+
+  case LED_STRIP_BODYLIGHTS: {
+
+    led_strip_clear(strip_bll_handle);
+    led_strip_clear(strip_blr_handle);
+    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
+      led_strip_set_pixel(strip_bll_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+      led_strip_set_pixel(strip_blr_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+    }
+    led_strip_refresh(strip_bll_handle);
+    led_strip_refresh(strip_blr_handle);
+    break;
+  }
+
+  case LED_STRIP_NONE:
+    break;
+  }
 }

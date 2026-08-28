@@ -1,13 +1,11 @@
 #include "app.h"
 #include "config.h"
-#include "display/lv_display.h"
 #include "esp_err.h"
 #include "esp_lcd_ili9341.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_touch_xpt2046.h"
 #include "esp_timer.h"
-#include "lvgl.h"
 #include "navigator.h"
 //
 
@@ -218,8 +216,12 @@ esp_err_t display_init(void) {
   init_lvgl();
 
   lv_obj_t *screen = lv_obj_create(NULL);
+  lv_obj_set_size(screen, 320, 240);
+  // lv_obj_set_style_bg_opa(screen, LV_OPA_TRANSP, LV_PART_MAIN);
   lv_obj_set_style_bg_color(screen, lv_color_hex(0xf7ffff), 0);
   lv_screen_load(screen);
+
+  // lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, LV_PART_MAIN);
 
   return ESP_OK;
 }
