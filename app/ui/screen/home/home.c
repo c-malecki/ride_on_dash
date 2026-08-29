@@ -1,23 +1,11 @@
-#include "view_home.h"
-// #include "presenter_home.h"
+#include "home.h"
+#include "misc/lv_types.h"
 #include "style.h"
+#include "ui.h"
 
-static void on_nav_btn_press(lv_event_t *lv_event) {
-  if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
-    return;
-  UI_View_Base_t *self = lv_event_get_user_data(lv_event);
-  self->navigate(UI_SCREEN_ID_ACCESSORY);
-}
+static void ui_home_screen_button_press(lv_event_t *lv_event) {}
 
-static void View_Home_Destroy(UI_View_Base_t *self) {
-  lv_obj_clean(lv_screen_active());
-}
-
-void View_Home_Create(UI_View_Base_t *self, lv_obj_t *parent) {
-  self->create = View_Home_Create;
-  self->destroy = View_Home_Destroy;
-  // Presenter_Home_t *presenter = (Presenter_Home_t *)self->ctx;
-
+static void ui_home_screen_render_fn(lv_obj_t *parent) {
   lv_obj_t *grid = UI_Style_Create_Grid(parent, UI_STYLE_GRID_3x2);
 
   // light select button
@@ -27,8 +15,8 @@ void View_Home_Create(UI_View_Base_t *self, lv_obj_t *parent) {
   lv_obj_set_style_border_width(light_select_btn, 0, 0);
   lv_obj_set_grid_cell(light_select_btn, LV_GRID_ALIGN_CENTER, 0, 1,
                        LV_GRID_ALIGN_CENTER, 0, 1);
-  lv_obj_add_event_cb(light_select_btn, on_nav_btn_press, LV_EVENT_CLICKED,
-                      self);
+  lv_obj_add_event_cb(light_select_btn, ui_home_screen_button_press,
+                      LV_EVENT_CLICKED, NULL);
 
   lv_color_t light_select_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
@@ -39,3 +27,8 @@ void View_Home_Create(UI_View_Base_t *self, lv_obj_t *parent) {
   lv_label_set_text(light_select_label, LV_SYMBOL_LEFT);
   lv_obj_set_style_align(light_select_label, LV_ALIGN_CENTER, 0);
 }
+
+const UI_Element_t UI_Screen_Home = {
+    .screen_id = UI_SCREEN_ID_HOME,
+    .render_fn = ui_home_screen_render_fn,
+};

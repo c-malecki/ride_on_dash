@@ -2,18 +2,18 @@
 // #include "model_accessory.h"
 // #include "presenter_accessory.h"
 #include "style.h"
-#include "view_base.h"
+#include "ui.h"
 
 static void on_nav_btn_press(lv_event_t *lv_event) {
   if (lv_event_get_code(lv_event) != LV_EVENT_CLICKED)
     return;
-  View_Base_t *self = lv_event_get_user_data(lv_event);
+  UI_View_Base_t *self = lv_event_get_user_data(lv_event);
   self->navigate(UI_SCREEN_ID_COLOR_PICKER);
 }
 
 /**/
 
-void View_Accessory_Create(View_Base_t *self, lv_obj_t *parent) {
+void View_Accessory_Create(UI_View_Base_t *self, lv_obj_t *parent) {
   // Presenter_Accessory_t *presenter = (Presenter_Accessory_t *)self->ctx;
   // Model_Accessory_t *model = presenter->model;
 
@@ -69,7 +69,7 @@ static void on_bodylight_btn_press(lv_event_t *lv_event) {
     return;
 
   // lv_obj_t *btn = lv_event_get_target(lv_event);
-  View_Base_t *self = lv_event_get_user_data(lv_event);
+  UI_View_Base_t *self = lv_event_get_user_data(lv_event);
   Presenter_Accessory_t *presenter = (Presenter_Accessory_t *)self->ctx;
 
   Model_Accessory_Set_Selected_Lights(presenter->model,
@@ -102,7 +102,7 @@ static void on_color_selected(void *ctx, Color_ID color_id) {
   //                               on_color_selected, presenter);
   // Presenter_Color_Picker_Init(&presenter_color_picker.base);
 
-  // static View_Base_t view_color_picker = {.ctx = &presenter_color_picker};
+  // static UI_View_Base_t view_color_picker = {.ctx = &presenter_color_picker};
   // lv_obj_t *color_picker =
   //     View_Color_Picker_Create(&view_color_picker, lv_layer_top());
   // lv_obj_center(color_picker);

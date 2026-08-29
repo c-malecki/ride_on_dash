@@ -21,7 +21,7 @@ void Presenter_Accessory_Create(Presenter_Accessory_t *presenter,
   presenter->base.model = model;
 }
 
-void Presenter_Accessory_Init(Presenter_Base_t *self) {
+void Presenter_Accessory_Init(UI_Presenter_Base_t *self) {
   Presenter_Accessory_t *presenter = (Presenter_Accessory_t *)self;
 
   // hypothetical example

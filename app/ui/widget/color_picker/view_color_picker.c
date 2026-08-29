@@ -15,7 +15,7 @@ static void color_picker_select_event_cb(lv_event_t *lv_event) {
     return;
 
   lv_obj_t *bm = lv_event_get_target(lv_event);
-  View_Base_t *self = lv_event_get_user_data(lv_event);
+  UI_View_Base_t *self = lv_event_get_user_data(lv_event);
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self->ctx;
 
   uint32_t idx = lv_buttonmatrix_get_selected_button(bm);
@@ -25,7 +25,7 @@ static void color_picker_select_event_cb(lv_event_t *lv_event) {
   Presenter_Color_Picker_Select(presenter, color_id);
 }
 
-lv_obj_t *View_Color_Picker_Create(View_Base_t *self, lv_obj_t *parent) {
+lv_obj_t *View_Color_Picker_Create(UI_View_Base_t *self, lv_obj_t *parent) {
   // Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t
   // *)self->ctx; Model_Color_Picker_t *model = presenter->model;
 

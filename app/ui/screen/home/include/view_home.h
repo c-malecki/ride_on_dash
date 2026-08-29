@@ -2,8 +2,8 @@
 #define __VIEW_HOME_H_
 
 #include "lvgl.h"
-#include "view_base.h"
+#include "ui.h"
 
-void View_Home_Create(View_Base_t *self, lv_obj_t *parent);
+void View_Home_Create(UI_View_Base_t *self, lv_obj_t *parent);
 
 #endif // __VIEW_HOME_H_

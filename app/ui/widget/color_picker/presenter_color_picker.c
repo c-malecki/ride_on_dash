@@ -14,7 +14,7 @@ void Presenter_Color_Picker_Create(Presenter_Color_Picker_t *presenter,
   presenter->base.model = model;
 }
 
-void Presenter_Color_Picker_Init(Presenter_Base_t *self) {
+void Presenter_Color_Picker_Init(UI_Presenter_Base_t *self) {
   Presenter_Color_Picker_t *presenter = (Presenter_Color_Picker_t *)self;
   Model_Color_Picker_Set_Selected_Color(presenter->model, COLOR_NONE);
 }
