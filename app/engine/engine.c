@@ -1,38 +1,31 @@
 #include "engine.h"
-#include "ui.h"
+#include "input.h"
+#include "model.h"
+#include "ui_screens.h"
 
-static UI_View_Base_t current_screen;
+/*
 
-void UI_Engine_Init(void) { UI_Engine_Load_Screen(UI_SCREEN_ID_HOME); }
+void UI_Model_Set_Prop(UI_Model_t *model, UI_Model_Prop_ID prop_id,
+                       uint32_t value)
+
+*/
+
+static UI_Model_t ui_model;
+
+void UI_Engine_Init(void) {
+  UI_Model_Init(&ui_model);
+
+  UI_Engine_Load_Screen(UI_SCREEN_ID_HOME);
+}
 
 void UI_Engine_Load_Screen(UI_Screen_ID screen_id) {
-  if (current_screen.destroy) {
-    current_screen.destroy(&current_screen);
+  if (ui_model.main_screen_obj != NULL) {
+    lv_obj_delete(ui_model.main_screen_obj);
   }
 
-  current_screen = (UI_View_Base_t){.navigate = UI_Engine_Load_Screen};
+  const UI_Screen_t *screen = UI_Screens_Find_By_ID(screen_id);
 
-  // switch (screen_id) {
-  // case UI_SCREEN_ID_HOME: {
-  //   current_screen.ctx = &presenter_home;
-  //   View_Home_Create(&current_screen, lv_screen_active());
-  //   break;
-  // }
-
-  // case UI_SCREEN_ID_ACCESSORY: {
-  //   current_screen.ctx = &presenter_accessory;
-  //   View_Accessory_Create(&current_screen, lv_screen_active());
-  //   break;
-  // }
-
-  // case UI_SCREEN_ID_COLOR_PICKER: {
-  //   current_screen.ctx = &presenter_color_picker;
-  //   View_Color_Picker_Create(&current_screen, lv_screen_active());
-  //   break;
-  // }
-
-  // case UI_SCREEN_ID_NONE:
-
-  //   break;
-  // }
+  if (screen->render_fn != NULL) {
+    screen->render_fn(ui_model.main_screen_obj);
+  }
 }

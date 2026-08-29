@@ -49,14 +49,15 @@ static void app_task(void *arg) {
 void app_main(void) {
   lvgl_mutex = xSemaphoreCreateMutex();
 
-  esp_err_t err = System_Init();
-  ESP_ERROR_CHECK(err);
+  // esp_err_t err = System_Init();
+  // ESP_ERROR_CHECK(err);
 
-  err = App_Init();
+  esp_err_t err = App_Init();
   ESP_ERROR_CHECK(err);
 
   xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl_timer_task", 16384, NULL, 7,
                           NULL, 1);
 
-  xTaskCreatePinnedToCore(system_task, "system_task", 8192, NULL, 5, NULL, 0);
+  // xTaskCreatePinnedToCore(system_task, "system_task", 8192, NULL, 5, NULL,
+  // 0);
 }

@@ -37,7 +37,8 @@ lv_obj_t *UI_Style_Create_Grid(lv_obj_t *parent, UI_Style_Grid_ID grid_id) {
     lv_obj_set_grid_dsc_array(grid, grid_cols_3, grid_rows_2);
     break;
 
-  case UI_STYLE_GRID_NONE:
+  case UI_STYLE_GRID_1x1:
+    lv_obj_set_grid_dsc_array(grid, grid_cols_1, grid_rows_1);
     break;
   }
 

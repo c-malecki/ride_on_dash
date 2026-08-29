@@ -1,5 +1,6 @@
 #include "app.h"
 #include "binding.h"
+#include "engine.h"
 #include "hardware.h"
 // drivers
 #include "esp_lcd_ili9341.h"
@@ -10,8 +11,6 @@
 #include "esp_err.h"
 #include "esp_timer.h"
 #include "lvgl.h"
-//
-#include "engine.h"
 
 QueueHandle_t app_event_queue = NULL;
 

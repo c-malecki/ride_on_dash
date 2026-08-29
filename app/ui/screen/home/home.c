@@ -1,9 +1,10 @@
 #include "home.h"
-#include "misc/lv_types.h"
+#include "input.h"
 #include "style.h"
-#include "ui.h"
 
-static void ui_home_screen_button_press(lv_event_t *lv_event) {}
+static void ui_home_screen_button_press(lv_event_t *lv_event) {
+  Input_Handle_LV_Event(lv_event);
+}
 
 static void ui_home_screen_render_fn(lv_obj_t *parent) {
   lv_obj_t *grid = UI_Style_Create_Grid(parent, UI_STYLE_GRID_3x2);
@@ -16,7 +17,7 @@ static void ui_home_screen_render_fn(lv_obj_t *parent) {
   lv_obj_set_grid_cell(light_select_btn, LV_GRID_ALIGN_CENTER, 0, 1,
                        LV_GRID_ALIGN_CENTER, 0, 1);
   lv_obj_add_event_cb(light_select_btn, ui_home_screen_button_press,
-                      LV_EVENT_CLICKED, NULL);
+                      LV_EVENT_CLICKED, (void *)UI_INPUT_ID_NAV_TO_LIGHT);
 
   lv_color_t light_select_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
   lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
@@ -28,7 +29,7 @@ static void ui_home_screen_render_fn(lv_obj_t *parent) {
   lv_obj_set_style_align(light_select_label, LV_ALIGN_CENTER, 0);
 }
 
-const UI_Element_t UI_Screen_Home = {
+const UI_Screen_t UI_Screen_Home = {
     .screen_id = UI_SCREEN_ID_HOME,
     .render_fn = ui_home_screen_render_fn,
 };

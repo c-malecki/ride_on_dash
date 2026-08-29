@@ -5,7 +5,7 @@
 #include "lvgl.h"
 
 typedef enum {
-  UI_STYLE_GRID_NONE = 0,
+  UI_STYLE_GRID_1x1 = 0,
   UI_STYLE_GRID_2x1,
   UI_STYLE_GRID_3x2,
 } UI_Style_Grid_ID;
