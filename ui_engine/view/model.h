@@ -1,7 +1,6 @@
 #ifndef __MODEL_H_
 #define __MODEL_H_
 
-#include "lvgl.h"
 #include "ui_definitions.h"
 #include <stdint.h>
 
@@ -12,7 +11,7 @@ typedef struct {
 
 typedef struct {
   lv_obj_t *main_screen_obj;
-  UI_Model_Prop_t model_props[];
+  UI_Model_Prop_t model_props[UI_MODEL_PROP_ID_COUNT];
 } UI_Model_t;
 
 void UI_Model_Init(UI_Model_t *model);

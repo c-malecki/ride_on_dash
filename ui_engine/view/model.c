@@ -17,8 +17,6 @@ UI_Model_Prop_t ui_model_prop_table[UI_MODEL_PROP_ID_COUNT] = {
 };
 
 void UI_Model_Init(UI_Model_t *model) {
-  model->main_screen_obj = NULL;
-
   lv_subject_init_int(
       &ui_model_prop_table[UI_MODEL_PROP_ID_HEADLIGHT_COLOR_ID].value,
       COLOR_NONE);

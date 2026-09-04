@@ -10,7 +10,7 @@ void Input_Handle_LV_Event(lv_event_t *lv_event) {
   switch (*input_id) {
 
   case INPUT_ID_NAV_TO_LIGHT: {
-    // UI_Engine_Load_Screen(UI_Screen_ID screen_id) break;
+    break;
   }
 
   case INPUT_ID_SHOW_HEADLIGHT_CONTROL: {

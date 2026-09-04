@@ -1,9 +1,9 @@
 #include "_system.h"
-#include "app.h"
 #include "esp_err.h"
 #include "freertos/idf_additions.h"
 #include "freertos/semphr.h"
 #include "lvgl.h"
+#include "ui_engine.h"
 
 static SemaphoreHandle_t lvgl_mutex = NULL;
 
@@ -37,11 +37,11 @@ static void system_task(void *arg) {
   }
 }
 
-static void app_task(void *arg) {
+static void ui_engine_task(void *arg) {
   Bridge_Event_t bridge_event;
   while (1) {
-    if (xQueueReceive(app_event_queue, &bridge_event, portMAX_DELAY)) {
-      App_Event_Consume(bridge_event);
+    if (xQueueReceive(ui_event_queue, &bridge_event, portMAX_DELAY)) {
+      UI_Engine_Event_Consume(bridge_event);
     }
   }
 }
@@ -52,7 +52,7 @@ void app_main(void) {
   // esp_err_t err = System_Init();
   // ESP_ERROR_CHECK(err);
 
-  esp_err_t err = App_Init();
+  esp_err_t err = UI_Engine_Init();
   ESP_ERROR_CHECK(err);
 
   xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl_timer_task", 16384, NULL, 7,

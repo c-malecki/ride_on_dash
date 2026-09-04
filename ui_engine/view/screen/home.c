@@ -6,11 +6,11 @@ static void ui_home_screen_button_press(lv_event_t *lv_event) {
   Input_Handle_LV_Event(lv_event);
 }
 
-static void ui_home_screen_render_fn(lv_obj_t *parent) {
-  lv_obj_t *grid = UI_Style_Create_Grid(parent, UI_STYLE_GRID_3x2);
+static void ui_home_screen_render_fn(lv_obj_t *container) {
+  UI_Style_Create_Grid(container, UI_STYLE_GRID_3x2);
 
   // light select button
-  lv_obj_t *light_select_btn = lv_button_create(grid);
+  lv_obj_t *light_select_btn = lv_button_create(container);
   lv_obj_set_size(light_select_btn, 70, 70);
   lv_obj_set_style_radius(light_select_btn, LV_RADIUS_CIRCLE, 0);
   lv_obj_set_style_border_width(light_select_btn, 0, 0);

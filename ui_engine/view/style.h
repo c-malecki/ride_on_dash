@@ -12,6 +12,6 @@ typedef enum {
 
 lv_color_t UI_Style_Get_LV_Color(Color_ID color_id);
 
-lv_obj_t *UI_Style_Create_Grid(lv_obj_t *parent, UI_Style_Grid_ID grid_id);
+void UI_Style_Create_Grid(lv_obj_t *parent, UI_Style_Grid_ID grid_id);
 
 #endif // __STYLE_H_

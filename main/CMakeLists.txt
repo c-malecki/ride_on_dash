@@ -1,14 +1,14 @@
 idf_component_register(
     SRCS "ride_on_dash.c"
-        "../app/app.c"
-        "../app/engine/engine.c"
-        "../app/ui/input/input.c"
-        "../app/ui/model/model.c"
-        "../app/ui/ui_screens.c"
-        "../app/ui/style/style.c"
-        "../app/ui/screen/home/home.c"
-        "../app/ui/screen/light/light.c"
-        "../app/ui/screen/splash/splash.c"
+        "../ui_engine/ui_engine.c"
+        "../ui_engine/driver/display_driver.c"
+        "../ui_engine/view/input.c"
+        "../ui_engine/view/model.c"
+        "../ui_engine/view/style.c"
+        "../ui_engine/view/ui_screens.c"
+        "../ui_engine/view/screen/home.c"
+        "../ui_engine/view/screen/light.c"
+        "../ui_engine/view/screen/splash.c"
 
         "../bridge/bridge.c"
 
@@ -19,15 +19,10 @@ idf_component_register(
         "../system/driver/led_driver.c"
 
     INCLUDE_DIRS "."
-        "../app"
-        "../app/engine"
-        "../app/ui"
-        "../app/ui/input"
-        "../app/ui/model"
-        "../app/ui/style"
-        "../app/ui/screen/home"
-        "../app/ui/screen/light"
-        "../app/ui/screen/splash"
+        "../ui_engine"
+        "../ui_engine/driver"
+        "../ui_engine/view"
+        "../ui_engine/view/screen"
 
         "../bridge"
 

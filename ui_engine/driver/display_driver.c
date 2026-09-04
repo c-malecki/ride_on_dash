@@ -1,18 +1,14 @@
-#include "app.h"
-#include "binding.h"
-#include "engine.h"
+#include "display_driver.h"
 #include "hardware.h"
 // drivers
 #include "esp_lcd_ili9341.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_touch_xpt2046.h"
+#include "esp_timer.h"
 // libs
 #include "esp_err.h"
-#include "esp_timer.h"
 #include "lvgl.h"
-
-QueueHandle_t app_event_queue = NULL;
 
 /* STATIC VARS */
 
@@ -24,37 +20,42 @@ static esp_lcd_touch_handle_t touch_handle = NULL;
 
 /* FORWARD PROTO DEP */
 
-esp_err_t display_init(void);
+esp_err_t init_panel(void);
+esp_err_t init_touch(void);
+void init_lvgl(void);
 
 /* INTERFACE */
 
-esp_err_t App_Init(void) {
-  esp_err_t err = display_init();
+esp_err_t Display_Driver_Init(void) {
+  spi_bus_config_t spi_bus_lcd = {
+      .sclk_io_num = LCD_PIN_SPI_CLK,
+      .mosi_io_num = LCD_PIN_SPI_MOSI,
+      .miso_io_num = LCD_PIN_SPI_MISO,
+      .quadwp_io_num = -1,
+      .quadhd_io_num = -1,
+      .max_transfer_sz = 240 * 320 * sizeof(uint16_t),
+  };
+  esp_err_t err = spi_bus_initialize(SPI2_HOST, &spi_bus_lcd, SPI_DMA_CH_AUTO);
   if (err != ESP_OK) {
     return err;
   }
 
-  UI_Engine_Init();
+  err = init_panel();
+  if (err != ESP_OK) {
+    return err;
+  }
 
-  app_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
+  err = init_touch();
+  if (err != ESP_OK) {
+    return err;
+  }
+
+  init_lvgl();
 
   return ESP_OK;
-};
-
-void App_Event_Consume(Bridge_Event_t bridge_event) {
-  switch (bridge_event.app_binding_id) {
-
-  case BINDING_APP_SET_LED_UI_COLOR: {
-    // TODO: UI model binding
-    break;
-  }
-
-  case BINDING_APP_NONE:
-    break;
-  }
 }
 
-/* LVGL APP SETUP */
+/* SETUP */
 
 static void lvgl_tick_cb(void *arg) { lv_tick_inc(2); }
 
@@ -207,41 +208,4 @@ void init_lvgl(void) {
   esp_timer_handle_t lvgl_tick_timer = NULL;
   ESP_ERROR_CHECK(esp_timer_create(&lvgl_tick_timer_args, &lvgl_tick_timer));
   ESP_ERROR_CHECK(esp_timer_start_periodic(lvgl_tick_timer, 2000));
-}
-
-esp_err_t display_init(void) {
-  spi_bus_config_t spi_bus_lcd = {
-      .sclk_io_num = LCD_PIN_SPI_CLK,
-      .mosi_io_num = LCD_PIN_SPI_MOSI,
-      .miso_io_num = LCD_PIN_SPI_MISO,
-      .quadwp_io_num = -1,
-      .quadhd_io_num = -1,
-      .max_transfer_sz = 240 * 320 * sizeof(uint16_t),
-  };
-  esp_err_t err = spi_bus_initialize(SPI2_HOST, &spi_bus_lcd, SPI_DMA_CH_AUTO);
-  if (err != ESP_OK) {
-    return err;
-  }
-
-  err = init_panel();
-  if (err != ESP_OK) {
-    return err;
-  }
-
-  err = init_touch();
-  if (err != ESP_OK) {
-    return err;
-  }
-
-  init_lvgl();
-
-  lv_obj_t *screen = lv_obj_create(NULL);
-  lv_obj_set_size(screen, 320, 240);
-  // lv_obj_set_style_bg_opa(screen, LV_OPA_TRANSP, LV_PART_MAIN);
-  lv_obj_set_style_bg_color(screen, lv_color_hex(0xf7ffff), 0);
-  lv_screen_load(screen);
-
-  // lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, LV_PART_MAIN);
-
-  return ESP_OK;
 }
