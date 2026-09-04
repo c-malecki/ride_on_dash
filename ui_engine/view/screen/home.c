@@ -1,35 +1,67 @@
 #include "home.h"
-#include "input.h"
+#include "_color.h"
+#include "button_base.h"
 #include "style.h"
+#include "ui_engine.h"
+
+/* Local State */
+
+/* UI Actions */
+
+static const UI_Action_t ui_home_screen_action = {
+    .action_id = UI_ACTION_ID_NAVIGATE,
+    .payload.screen_id = UI_SCREEN_ID_LIGHT,
+};
 
 static void ui_home_screen_button_press(lv_event_t *lv_event) {
-  Input_Handle_LV_Event(lv_event);
+  const UI_Action_t *action =
+      (const UI_Action_t *)lv_event_get_user_data(lv_event);
+  UI_Engine_Execute_Action(action);
 }
 
-static void ui_home_screen_render_fn(lv_obj_t *container) {
+/* UI Configs */
+
+const UI_Button_Base_Config_t light_btn_cfg = {
+    .color = COLOR_GRAY,
+    .label = LV_SYMBOL_POWER,
+    .row = 0,
+    .col = 0,
+};
+
+// const lv_color_t rainbow_colors[] = {
+//     LV_COLOR_MAKE(0, 0, 0),     LV_COLOR_MAKE(255, 255, 255),
+//     LV_COLOR_MAKE(255, 0, 0),   LV_COLOR_MAKE(255, 128, 0),
+//     LV_COLOR_MAKE(255, 255, 0), LV_COLOR_MAKE(0, 255, 0),
+//     LV_COLOR_MAKE(0, 0, 255),   LV_COLOR_MAKE(128, 0, 255),
+// };
+
+/* Render Function */
+
+static void render(lv_obj_t *container) {
   UI_Style_Create_Grid(container, UI_STYLE_GRID_3x2);
+  lv_obj_t *light_btn = lv_button_create(container);
 
-  // light select button
-  lv_obj_t *light_select_btn = lv_button_create(container);
-  lv_obj_set_size(light_select_btn, 70, 70);
-  lv_obj_set_style_radius(light_select_btn, LV_RADIUS_CIRCLE, 0);
-  lv_obj_set_style_border_width(light_select_btn, 0, 0);
-  lv_obj_set_grid_cell(light_select_btn, LV_GRID_ALIGN_CENTER, 0, 1,
-                       LV_GRID_ALIGN_CENTER, 0, 1);
-  lv_obj_add_event_cb(light_select_btn, ui_home_screen_button_press,
-                      LV_EVENT_CLICKED, (void *)UI_INPUT_ID_NAV_TO_LIGHT);
+  UI_Button_Base_Apply(light_btn, &light_btn_cfg);
+  lv_obj_add_event_cb(light_btn, ui_home_screen_button_press, LV_EVENT_CLICKED,
+                      (void *)&ui_home_screen_action);
 
-  lv_color_t light_select_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
-  lv_obj_set_style_bg_color(light_select_btn, light_select_btn_color, 0);
+  //   static lv_grad_dsc_t rainbow_grad;
+  //   lv_grad_init_stops(&rainbow_grad, rainbow_colors, NULL, NULL,
+  //                      sizeof(rainbow_colors) / sizeof(lv_color_t));
 
-  // light select label
-  lv_obj_t *light_select_label = lv_label_create(light_select_btn);
-  lv_obj_set_style_text_font(light_select_label, &lv_font_montserrat_28, 0);
-  lv_label_set_text(light_select_label, LV_SYMBOL_LEFT);
-  lv_obj_set_style_align(light_select_label, LV_ALIGN_CENTER, 0);
+  //   lv_grad_horizontal_init(&rainbow_grad);
+
+  //   static lv_style_t style_rainbow;
+  //   lv_style_init(&style_rainbow);
+  //   lv_style_set_bg_grad(&style_rainbow, &rainbow_grad);
+  //   lv_style_set_bg_opa(&style_rainbow, LV_OPA_COVER);
+
+  //   lv_obj_add_style(light_btn, &style_rainbow, LV_PART_MAIN);
 }
+
+/* Export */
 
 const UI_Screen_t UI_Screen_Home = {
     .screen_id = UI_SCREEN_ID_HOME,
-    .render_fn = ui_home_screen_render_fn,
+    .render_fn = render,
 };

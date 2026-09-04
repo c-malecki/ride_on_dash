@@ -1,13 +1,39 @@
 #include "style.h"
 #include "_color.h"
 
-const lv_style_const_prop_t style_grid_props[] = {
-    LV_STYLE_CONST_WIDTH(320),
-    LV_STYLE_CONST_HEIGHT(240),
-    LV_STYLE_CONST_BORDER_WIDTH(0),
-    LV_STYLE_CONST_LAYOUT(LV_LAYOUT_GRID),
+/* COLORS */
+
+static const lv_color_t ui_color_none = LV_COLOR_MAKE(0, 0, 0);
+static const lv_color_t ui_color_white = LV_COLOR_MAKE(255, 255, 255);
+static const lv_color_t ui_color_red = LV_COLOR_MAKE(255, 0, 0);
+static const lv_color_t ui_color_orange = LV_COLOR_MAKE(255, 128, 0);
+static const lv_color_t ui_color_yellow = LV_COLOR_MAKE(255, 255, 0);
+static const lv_color_t ui_color_green = LV_COLOR_MAKE(0, 255, 0);
+static const lv_color_t ui_color_blue = LV_COLOR_MAKE(0, 0, 255);
+static const lv_color_t ui_color_violet = LV_COLOR_MAKE(128, 0, 255);
+static const lv_color_t ui_color_gray = LV_COLOR_MAKE(96, 125, 139);
+
+const lv_color_t *ui_color_table[COLOR_COUNT] = {
+    [COLOR_NONE] = &ui_color_none,     [COLOR_WHITE] = &ui_color_white,
+    [COLOR_RED] = &ui_color_red,       [COLOR_ORANGE] = &ui_color_orange,
+    [COLOR_YELLOW] = &ui_color_yellow, [COLOR_GREEN] = &ui_color_green,
+    [COLOR_BLUE] = &ui_color_blue,     [COLOR_VIOLET] = &ui_color_violet,
+    [COLOR_GRAY] = &ui_color_gray,
 };
-LV_STYLE_CONST_INIT(style_grid, style_grid_props);
+
+const size_t ui_color_table_size =
+    sizeof(ui_color_table) / sizeof(ui_color_table[0]);
+
+const lv_color_t *UI_Color_Table_Find_By_ID(Color_ID color_id) {
+  if (color_id >= COLOR_COUNT) {
+    return ui_color_table[COLOR_NONE];
+  }
+  return ui_color_table[color_id];
+}
+
+uint8_t UI_Color_Table_Get_Count(void) { return COLOR_COUNT; }
+
+/* LAYOUTS */
 
 const int32_t grid_cols_1[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 const int32_t grid_cols_2[] = {LV_GRID_FR(1), LV_GRID_FR(1),
@@ -19,13 +45,11 @@ const int32_t grid_rows_1[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 const int32_t grid_rows_2[] = {LV_GRID_FR(1), LV_GRID_FR(1),
                                LV_GRID_TEMPLATE_LAST};
 
-lv_color_t UI_Style_Get_LV_Color(Color_ID color_id) {
-  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
-  return lv_color_make(color->color->r, color->color->g, color->color->b);
-}
-
 void UI_Style_Create_Grid(lv_obj_t *container, UI_Style_Grid_ID grid_id) {
-  lv_obj_add_style(container, &style_grid, 0);
+  lv_obj_set_layout(container, LV_LAYOUT_GRID);
+  lv_obj_set_width(container, 320);
+  lv_obj_set_height(container, 240);
+  lv_obj_set_style_border_width(container, 0, 0);
 
   switch (grid_id) {
   case UI_STYLE_GRID_2x1:

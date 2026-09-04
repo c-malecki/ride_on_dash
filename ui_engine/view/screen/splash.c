@@ -7,7 +7,7 @@ static void ui_splash_screen_render_fn(lv_obj_t *container) {
   lv_obj_t *led = lv_led_create(container);
   lv_obj_set_grid_cell(led, LV_GRID_ALIGN_CENTER, 0, 0, LV_GRID_ALIGN_CENTER, 0,
                        0);
-  lv_led_set_color(led, UI_Style_Get_LV_Color(COLOR_BLUE));
+  lv_led_set_color(led, *UI_Color_Table_Find_By_ID(COLOR_BLUE));
   lv_led_on(led);
 }
 

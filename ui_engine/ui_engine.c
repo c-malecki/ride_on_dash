@@ -1,9 +1,14 @@
 #include "ui_engine.h"
+#include "_color.h"
 #include "binding.h"
 #include "display_driver.h"
 #include "esp_err.h"
-#include "model.h"
-#include "ui_screens.h"
+#include "esp_log.h"
+#include "screens.h"
+
+void light_model_init();
+
+/* */
 
 QueueHandle_t ui_event_queue = NULL;
 
@@ -11,7 +16,7 @@ QueueHandle_t ui_event_queue = NULL;
 
 static UI_Model_t ui_model;
 
-/* FORWARD PROTO DEP */
+/* PRIVATE PROTO */
 
 void load_screen(UI_Screen_ID screen_id);
 
@@ -30,13 +35,46 @@ esp_err_t UI_Engine_Init(void) {
   lv_obj_set_style_bg_color(main_screen, lv_color_hex(0xf7ffff), 0);
   lv_screen_load(main_screen);
 
-  UI_Model_Init(&ui_model);
+  light_model_init();
+
   ui_model.main_screen_obj = main_screen;
 
   load_screen(UI_SCREEN_ID_HOME);
 
   return ESP_OK;
 };
+
+void UI_Engine_Screen_Register_Inputs() {}
+
+void UI_Engine_Execute_Action(const UI_Action_t *action) {
+  if (action == NULL) {
+    return;
+  }
+
+  switch (action->action_id) {
+
+  case UI_ACTION_ID_NAVIGATE: {
+    load_screen(action->payload.screen_id);
+    break;
+  }
+
+  case UI_ACTION_ID_SET_PROP: {
+    ESP_LOGI("ui_engine", "UI_ACTION_ID_SET_PROP");
+    // UI_Model_Prop_ID prop_id = action->payload.prop_data.prop_id;
+    // uint32_t new_value = action->payload.prop_data.value;
+
+    // lv_subject_set_int(&ui_model.model_props[prop_id].value, new_value);
+
+    // Bridge_Event_t bridge_event = {.app_binding_id =
+    //                                    BINDING_APP_SET_LED_UI_COLOR};
+    // xQueueSend(ui_event_queue, &out_event, 0);
+    break;
+  }
+
+  case UI_ACTION_ID_COUNT:
+    break;
+  }
+}
 
 void UI_Engine_Event_Consume(Bridge_Event_t bridge_event) {
   switch (bridge_event.app_binding_id) {
@@ -50,6 +88,8 @@ void UI_Engine_Event_Consume(Bridge_Event_t bridge_event) {
     break;
   }
 }
+
+/* PRIVATE */
 
 void load_screen(UI_Screen_ID screen_id) {
   lv_obj_t *old_container = lv_obj_get_child(ui_model.main_screen_obj, 0);
@@ -65,4 +105,9 @@ void load_screen(UI_Screen_ID screen_id) {
   if (screen->render_fn != NULL) {
     screen->render_fn(new_container);
   }
+}
+
+void light_model_init() {
+  lv_subject_init_int(&ui_model.model_light.headlight_color, COLOR_YELLOW);
+  lv_subject_init_int(&ui_model.model_light.bodylight_color, COLOR_YELLOW);
 }

@@ -1,56 +1,158 @@
 #include "light.h"
-#include "input.h"
+#include "_color.h"
+#include "button_base.h"
+#include "color_picker.h"
+#include "definitions.h"
 #include "style.h"
+#include "ui_engine.h"
+#include <stdbool.h>
 
-static void ui_light_screen_button_press(lv_event_t *lv_event) {
-  Input_Handle_LV_Event(lv_event);
+/* Local State */
+
+typedef enum {
+  EDITING_NONE,
+  EDITING_HEADLIGHT,
+  EDITING_BODYLIGHT
+} selected_light;
+
+static struct {
+  selected_light selected_light;
+  lv_subject_t show_color_picker;
+  // lv_obj_t *color_picker_modal;
+  // lv_obj_t *headlight_btn;
+  // lv_obj_t *bodylight_btn;
+} local_view_state;
+
+/* UI Actions */
+
+static void handle_color_picker(Color_ID color_id) {
+  UI_Model_Prop_ID prop_id = UI_MODEL_PROP_NONE;
+
+  switch (local_view_state.selected_light) {
+  case EDITING_HEADLIGHT: {
+    prop_id = UI_MODEL_PROP_HEADLIGHT_COLOR;
+    break;
+  }
+
+  case EDITING_BODYLIGHT: {
+    prop_id = UI_MODEL_PROP_BODYLIGHT_COLOR;
+    break;
+  }
+
+  case EDITING_NONE:
+    break;
+  }
+
+  const UI_Action_t *action = &(const UI_Action_t){
+      .action_id = UI_ACTION_ID_SET_PROP,
+      .payload.model_prop_data.model_prop_id = prop_id,
+      .payload.model_prop_data.value = color_id,
+  };
+
+  UI_Engine_Execute_Action(action);
+
+  local_view_state.selected_light = EDITING_NONE;
+  lv_subject_set_int(&local_view_state.show_color_picker, 0);
 }
 
-static void ui_light_screen_render_fn(lv_obj_t *container) {
+static void select_light_to_edit(lv_event_t *lv_event) {
+  selected_light selection =
+      (selected_light)(uintptr_t)lv_event_get_user_data(lv_event);
+  local_view_state.selected_light = selection;
+  lv_subject_set_int(&local_view_state.show_color_picker, 1);
+}
+
+/* UI Configs */
+
+const UI_Button_Base_Config_t headlight_btn_cfg = {
+    .color = COLOR_NONE,
+    .label = LV_SYMBOL_LEFT,
+    .row = 0,
+    .col = 0,
+};
+
+const UI_Button_Base_Config_t bodylight_btn_cfg = {
+    .color = COLOR_GRAY,
+    .label = LV_SYMBOL_LEFT,
+    .row = 0,
+    .col = 1,
+};
+
+const UI_Color_Picker_Config_t color_picker_cfg = {
+    .color_picker_cb = handle_color_picker,
+};
+
+/* Render Function */
+
+static void render(lv_obj_t *container) {
   UI_Style_Create_Grid(container, UI_STYLE_GRID_2x1);
 
-  // headlights button
   lv_obj_t *headlight_btn = lv_button_create(container);
-  lv_obj_set_size(headlight_btn, 70, 70);
-  lv_obj_set_style_radius(headlight_btn, LV_RADIUS_CIRCLE, 0);
-  lv_obj_set_style_border_width(headlight_btn, 0, 0);
-  lv_obj_set_grid_cell(headlight_btn, LV_GRID_ALIGN_CENTER, 0, 1,
-                       LV_GRID_ALIGN_CENTER, 0, 1);
-  lv_obj_add_event_cb(headlight_btn, ui_light_screen_button_press,
-                      LV_EVENT_CLICKED,
-                      (void *)UI_INPUT_ID_SHOW_HEADLIGHT_CONTROL);
+  UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);
+  lv_obj_add_event_cb(headlight_btn, select_light_to_edit, LV_EVENT_CLICKED,
+                      (void *)EDITING_HEADLIGHT);
 
-  lv_color_t hl_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
-  lv_obj_set_style_bg_color(headlight_btn, hl_btn_color, 0);
+  // local_view_state.headlight_btn = headlight_btn;
 
-  // headlights label
-  lv_obj_t *headlight_label = lv_label_create(headlight_btn);
-  lv_obj_set_style_text_font(headlight_label, &lv_font_montserrat_28, 0);
-  lv_label_set_text(headlight_label, LV_SYMBOL_LEFT);
-  lv_obj_set_style_align(headlight_label, LV_ALIGN_CENTER, 0);
-
-  // bodylights button
   lv_obj_t *bodylight_btn = lv_button_create(container);
-  lv_obj_set_size(bodylight_btn, 70, 70);
-  lv_obj_set_style_radius(bodylight_btn, LV_RADIUS_CIRCLE, 0);
-  lv_obj_set_style_border_width(bodylight_btn, 0, 0);
-  lv_obj_set_grid_cell(bodylight_btn, LV_GRID_ALIGN_CENTER, 1, 1,
-                       LV_GRID_ALIGN_CENTER, 0, 1);
-  lv_obj_add_event_cb(bodylight_btn, ui_light_screen_button_press,
-                      LV_EVENT_CLICKED,
-                      (void *)UI_INPUT_ID_SHOW_BODYLIGHT_CONTROL);
+  UI_Button_Base_Apply(bodylight_btn, &bodylight_btn_cfg);
+  lv_obj_add_event_cb(bodylight_btn, select_light_to_edit, LV_EVENT_CLICKED,
+                      (void *)EDITING_BODYLIGHT);
 
-  lv_color_t bl_btn_color = UI_Style_Get_LV_Color(COLOR_YELLOW);
-  lv_obj_set_style_bg_color(bodylight_btn, bl_btn_color, 0);
+  // local_view_state.bodylight_btn = bodylight_btn;
 
-  // bodylights label
-  lv_obj_t *bodylight_label = lv_label_create(bodylight_btn);
-  lv_obj_set_style_text_font(bodylight_label, &lv_font_montserrat_28, 0);
-  lv_label_set_text(bodylight_label, LV_SYMBOL_DRIVE);
-  lv_obj_set_style_align(bodylight_label, LV_ALIGN_CENTER, 0);
+  lv_obj_t *bm = lv_buttonmatrix_create(lv_layer_top());
+  UI_Color_Picker_Apply(bm, &color_picker_cfg);
+
+  lv_subject_init_int(&local_view_state.show_color_picker, 0);
+  lv_obj_bind_flag_if_eq(bm, &local_view_state.show_color_picker,
+                         LV_OBJ_FLAG_HIDDEN, 0);
 }
+
+/* Export */
 
 const UI_Screen_t UI_Screen_Light = {
     .screen_id = UI_SCREEN_ID_LIGHT,
-    .render_fn = ui_light_screen_render_fn,
+    .render_fn = render,
 };
+
+//////////
+
+// static void on_color_selected(lv_event_t *e) {
+// lv_obj_t *wheel = lv_event_get_target(e);
+
+// Wait until the user finishes selecting (e.g., releases the wheel or presses
+// an OK button) if(lv_event_get_code(e) == LV_EVENT_VALUE_CHANGED &&
+// !lv_indev_is_dragging(lv_indev_get_act())) {
+//     lv_color_t selected_color = lv_colorwheel_get_rgb(wheel);
+
+// 4. Construct a single rich action bundle to send to the engine
+// UI_Action_t action = {
+//     .action_id = UI_ACTION_ID_SET_PROP,
+//     .payload.prop_data = {
+// Map local target context back to global property IDs
+//         .prop_id = (local_view_state.current_target == EDITING_HEADLIGHT) ?
+//                     UI_MODEL_PROP_ID_HEADLIGHT :
+//                     UI_MODEL_PROP_ID_BODYLIGHT,
+//         .value = lv_color_to_u32(selected_color)
+//     }
+// };
+
+// Send to Engine Controller
+// UI_Engine_Execute_Action(&action);
+
+// Clean up the local color picker widget automatically
+// lv_obj_delete(local_view_state.color_picker_modal);
+// local_view_state.color_picker_modal = NULL;
+// local_view_state.current_target = EDITING_NONE;
+// }
+// }
+
+// Make the color picker "dumb" and local: just create/show it right here
+// local_view_state.color_picker_modal =
+// lv_colorwheel_create(lv_screen_active(), true);
+// lv_obj_center(local_view_state.color_picker_modal);
+
+// Bind a local callback to the color picker
+// lv_obj_add_event_cb(local_view_state.color_picker_modal, on_color_selected,
+// LV_EVENT_VALUE_CHANGED, NULL);
