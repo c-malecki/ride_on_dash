@@ -6,6 +6,15 @@
 #include "style.h"
 #include <stdbool.h>
 
+/*
+
+  FUTURE TODO:
+
+    make car UI instead of just a button so it's much more clear which part for
+  kids e.g. show actual car and headlights on screen with color of lights
+
+*/
+
 /* Local State */
 
 typedef enum {
@@ -54,7 +63,7 @@ const UI_Button_Base_Config_t headlight_btn_cfg = {
 
 const UI_Button_Base_Config_t bodylight_btn_cfg = {
     .color = COLOR_NONE,
-    .label = LV_SYMBOL_LEFT,
+    .label = LV_SYMBOL_DRIVE,
     .row = 0,
     .col = 1,
 };

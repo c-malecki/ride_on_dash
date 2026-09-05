@@ -9,7 +9,6 @@ typedef struct {
   const char *label;
   int32_t row;
   int32_t col;
-  // callback/model binding of some sort
 } UI_Button_Base_Config_t;
 
 void UI_Button_Base_Apply(lv_obj_t *btn, const UI_Button_Base_Config_t *config);
