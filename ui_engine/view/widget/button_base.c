@@ -1,10 +1,14 @@
 #include "button_base.h"
+#include "core/lv_obj_style_gen.h"
+#include "misc/lv_color.h"
 #include "style.h"
 
 void UI_Button_Base_Apply(lv_obj_t *btn,
                           const UI_Button_Base_Config_t *config) {
   lv_obj_set_size(btn, 70, 70);
-  lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, 0);
+  lv_obj_set_style_radius(btn, 8, 0);
+  lv_obj_set_style_border_width(btn, 1, 0);
+  lv_obj_set_style_border_color(btn, lv_color_black(), 0);
   lv_obj_set_grid_cell(btn, LV_GRID_ALIGN_CENTER, config->col, 1,
                        LV_GRID_ALIGN_CENTER, config->row, 1);
 

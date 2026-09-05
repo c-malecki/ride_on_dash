@@ -1,6 +1,8 @@
 #include "color_picker.h"
 #include "_color.h"
+#include "core/lv_obj_style_gen.h"
 #include "style.h"
+#include "widgets/buttonmatrix/lv_buttonmatrix.h"
 
 /* Local State */
 
@@ -44,25 +46,15 @@ static void draw_cb(lv_event_t *lv_event) {
       CFG_Color_Find_Entry(draw_base->id1)->color_id);
 }
 
+const char *color_picker_map[] = {"OFF", "W", "R", "O", "\n",
+                                  "Y",   "G", "B", "V", ""};
+
 void UI_Color_Picker_Apply(lv_obj_t *button_matrix,
                            const UI_Color_Picker_Config_t *config) {
   registered_color_picker_cb = config->color_picker_cb;
 
-  static const char *map[10];
-
-  map[0] = CFG_Color_Find_Entry(COLOR_NONE)->label;
-  map[1] = CFG_Color_Find_Entry(COLOR_WHITE)->label;
-  map[2] = CFG_Color_Find_Entry(COLOR_RED)->label;
-  map[3] = CFG_Color_Find_Entry(COLOR_ORANGE)->label;
-  map[4] = CFG_Color_Find_Entry(COLOR_YELLOW)->label;
-  map[5] = "\n";
-  map[6] = CFG_Color_Find_Entry(COLOR_GREEN)->label;
-  map[7] = CFG_Color_Find_Entry(COLOR_BLUE)->label;
-  map[8] = CFG_Color_Find_Entry(COLOR_VIOLET)->label;
-  map[9] = "";
-
   lv_obj_set_size(button_matrix, 320, 240);
-  lv_buttonmatrix_set_map(button_matrix, map);
+  lv_buttonmatrix_set_map(button_matrix, color_picker_map);
 
   lv_obj_set_style_text_opa(button_matrix, LV_OPA_TRANSP, LV_PART_ITEMS);
   lv_obj_set_style_border_width(button_matrix, 2, LV_PART_ITEMS);
