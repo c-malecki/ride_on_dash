@@ -1,7 +1,6 @@
 #ifndef __SYSTEM_H_
 #define __SYSTEM_H_
 
-#include "bridge.h"
 #include "esp_err.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
@@ -10,6 +9,18 @@ extern QueueHandle_t system_event_queue;
 
 esp_err_t System_Init(void);
 
-void System_Event_Consume(Bridge_Event_t bridge_event);
+typedef enum {
+  SYSTEM_ACTION_ID_COUNT = 0,
+  SYSTEM_ACTION_ID_SET_HEADLIGHT,
+  SYSTEM_ACTION_ID_SET_BODYLIGHT,
+} System_Action_ID;
+
+typedef struct {
+  System_Action_ID action_id;
+  uint32_t value;
+} System_Action_t;
+
+void System_Execute_Action(System_Action_t *action);
+// void System_Set_LED_Strip(LED_Set_Strip_Color_Arg_t *arg);
 
 #endif // __SYSTEM_H_

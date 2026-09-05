@@ -111,3 +111,44 @@ static void led_driver_set_strip_color(LED_Set_Strip_Color_Arg_t *arg) {
 LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void) {
   return &led_driver_set_strip_color;
 }
+
+//
+
+void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
+  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
+
+  switch (strip_id) {
+  case LED_STRIP_HEADLIGHTS: {
+
+    led_strip_clear(strip_hll_handle);
+    led_strip_clear(strip_hlr_handle);
+    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
+      led_strip_set_pixel(strip_hll_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+      led_strip_set_pixel(strip_hlr_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+    }
+    led_strip_refresh(strip_hll_handle);
+    led_strip_refresh(strip_hlr_handle);
+    break;
+  }
+
+  case LED_STRIP_BODYLIGHTS: {
+
+    led_strip_clear(strip_bll_handle);
+    led_strip_clear(strip_blr_handle);
+    for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
+      led_strip_set_pixel(strip_bll_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+      led_strip_set_pixel(strip_blr_handle, i, color->color->r, color->color->g,
+                          color->color->b);
+    }
+    led_strip_refresh(strip_bll_handle);
+    led_strip_refresh(strip_blr_handle);
+    break;
+  }
+
+  case LED_STRIP_NONE:
+    break;
+  }
+}

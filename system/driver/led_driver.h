@@ -19,6 +19,7 @@ typedef struct {
 typedef void (*LED_Driver_Set_Strip_Color_CB)(LED_Set_Strip_Color_Arg_t *arg);
 
 esp_err_t LED_Init(void);
+void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id);
 
 LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void);
 

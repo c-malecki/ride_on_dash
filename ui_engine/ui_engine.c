@@ -1,20 +1,15 @@
 #include "ui_engine.h"
-#include "_color.h"
-#include "binding.h"
 #include "display_driver.h"
 #include "esp_err.h"
-#include "esp_log.h"
-#include "screens.h"
+#include "home.h"
+#include "light.h"
+#include "splash.h"
 
-void light_model_init();
-
-/* */
-
-QueueHandle_t ui_event_queue = NULL;
+// QueueHandle_t ui_event_queue = NULL;
 
 /* STATIC VARS */
 
-static UI_Model_t ui_model;
+static lv_obj_t *main_screen_obj;
 
 /* PRIVATE PROTO */
 
@@ -23,7 +18,7 @@ void load_screen(UI_Screen_ID screen_id);
 /* INTERFACE */
 
 esp_err_t UI_Engine_Init(void) {
-  ui_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
+  // ui_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
 
   esp_err_t err = Display_Driver_Init();
   if (err != ESP_OK) {
@@ -35,79 +30,44 @@ esp_err_t UI_Engine_Init(void) {
   lv_obj_set_style_bg_color(main_screen, lv_color_hex(0xf7ffff), 0);
   lv_screen_load(main_screen);
 
-  light_model_init();
-
-  ui_model.main_screen_obj = main_screen;
+  main_screen_obj = main_screen;
 
   load_screen(UI_SCREEN_ID_HOME);
 
   return ESP_OK;
 };
 
-void UI_Engine_Screen_Register_Inputs() {}
-
-void UI_Engine_Execute_Action(const UI_Action_t *action) {
-  if (action == NULL) {
-    return;
-  }
-
-  switch (action->action_id) {
-
-  case UI_ACTION_ID_NAVIGATE: {
-    load_screen(action->payload.screen_id);
-    break;
-  }
-
-  case UI_ACTION_ID_SET_PROP: {
-    ESP_LOGI("ui_engine", "UI_ACTION_ID_SET_PROP");
-    // UI_Model_Prop_ID prop_id = action->payload.prop_data.prop_id;
-    // uint32_t new_value = action->payload.prop_data.value;
-
-    // lv_subject_set_int(&ui_model.model_props[prop_id].value, new_value);
-
-    // Bridge_Event_t bridge_event = {.app_binding_id =
-    //                                    BINDING_APP_SET_LED_UI_COLOR};
-    // xQueueSend(ui_event_queue, &out_event, 0);
-    break;
-  }
-
-  case UI_ACTION_ID_COUNT:
-    break;
-  }
-}
-
-void UI_Engine_Event_Consume(Bridge_Event_t bridge_event) {
-  switch (bridge_event.app_binding_id) {
-
-  case BINDING_APP_SET_LED_UI_COLOR: {
-    // TODO: UI model binding
-    break;
-  }
-
-  case BINDING_APP_NONE:
-    break;
-  }
-}
+void UI_Engine_Navigate(UI_Screen_ID screen_id) { load_screen(screen_id); }
 
 /* PRIVATE */
 
 void load_screen(UI_Screen_ID screen_id) {
-  lv_obj_t *old_container = lv_obj_get_child(ui_model.main_screen_obj, 0);
+  lv_obj_t *old_container = lv_obj_get_child(main_screen_obj, 0);
 
   if (old_container != NULL) {
     lv_obj_delete_async(old_container);
   }
 
-  lv_obj_t *new_container = lv_obj_create(ui_model.main_screen_obj);
+  lv_obj_t *new_container = lv_obj_create(main_screen_obj);
 
-  const UI_Screen_t *screen = UI_Screens_Find_By_ID(screen_id);
+  switch (screen_id) {
 
-  if (screen->render_fn != NULL) {
-    screen->render_fn(new_container);
+  case UI_SCREEN_ID_HOME: {
+    Render_Home(new_container);
+    break;
   }
-}
 
-void light_model_init() {
-  lv_subject_init_int(&ui_model.model_light.headlight_color, COLOR_YELLOW);
-  lv_subject_init_int(&ui_model.model_light.bodylight_color, COLOR_YELLOW);
+  case UI_SCREEN_ID_LIGHT: {
+    Render_Light(new_container);
+    break;
+  }
+
+  case UI_SCREEN_ID_SPLASH: {
+    Render_Splash(new_container);
+    break;
+  }
+
+  case UI_SCREEN_ID_COUNT:
+    break;
+  }
 }

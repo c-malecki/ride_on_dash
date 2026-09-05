@@ -1,57 +1,38 @@
 #include "light.h"
 #include "_color.h"
+#include "bridge.h"
 #include "button_base.h"
 #include "color_picker.h"
-#include "definitions.h"
 #include "style.h"
-#include "ui_engine.h"
 #include <stdbool.h>
 
 /* Local State */
 
 typedef enum {
-  EDITING_NONE,
-  EDITING_HEADLIGHT,
-  EDITING_BODYLIGHT
+  SELECTED_NONE,
+  SELECTED_HEADLIGHT,
+  SELECTED_BODYLIGHT
 } selected_light;
 
 static struct {
   selected_light selected_light;
   lv_subject_t show_color_picker;
-  // lv_obj_t *color_picker_modal;
-  // lv_obj_t *headlight_btn;
-  // lv_obj_t *bodylight_btn;
 } local_view_state;
 
 /* UI Actions */
 
 static void handle_color_picker(Color_ID color_id) {
-  UI_Model_Prop_ID prop_id = UI_MODEL_PROP_NONE;
+  Bridge_Model_Prop_ID prop_id = BRIDGE_MODEL_PROP_NONE;
 
-  switch (local_view_state.selected_light) {
-  case EDITING_HEADLIGHT: {
-    prop_id = UI_MODEL_PROP_HEADLIGHT_COLOR;
-    break;
+  if (local_view_state.selected_light == SELECTED_HEADLIGHT) {
+    prop_id = BRIDGE_MODEL_PROP_HEADLIGHT_COLOR;
+  } else if (local_view_state.selected_light == SELECTED_BODYLIGHT) {
+    prop_id = BRIDGE_MODEL_PROP_BODYLIGHT_COLOR;
   }
 
-  case EDITING_BODYLIGHT: {
-    prop_id = UI_MODEL_PROP_BODYLIGHT_COLOR;
-    break;
-  }
+  BRIDGE_MODEL_SET_PROP(prop_id, color_id);
 
-  case EDITING_NONE:
-    break;
-  }
-
-  const UI_Action_t *action = &(const UI_Action_t){
-      .action_id = UI_ACTION_ID_SET_PROP,
-      .payload.model_prop_data.model_prop_id = prop_id,
-      .payload.model_prop_data.value = color_id,
-  };
-
-  UI_Engine_Execute_Action(action);
-
-  local_view_state.selected_light = EDITING_NONE;
+  local_view_state.selected_light = SELECTED_NONE;
   lv_subject_set_int(&local_view_state.show_color_picker, 0);
 }
 
@@ -72,7 +53,7 @@ const UI_Button_Base_Config_t headlight_btn_cfg = {
 };
 
 const UI_Button_Base_Config_t bodylight_btn_cfg = {
-    .color = COLOR_GRAY,
+    .color = COLOR_NONE,
     .label = LV_SYMBOL_LEFT,
     .row = 0,
     .col = 1,
@@ -84,22 +65,23 @@ const UI_Color_Picker_Config_t color_picker_cfg = {
 
 /* Render Function */
 
-static void render(lv_obj_t *container) {
+void Render_Light(lv_obj_t *container) {
   UI_Style_Create_Grid(container, UI_STYLE_GRID_2x1);
 
   lv_obj_t *headlight_btn = lv_button_create(container);
   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);
   lv_obj_add_event_cb(headlight_btn, select_light_to_edit, LV_EVENT_CLICKED,
-                      (void *)EDITING_HEADLIGHT);
-
-  // local_view_state.headlight_btn = headlight_btn;
+                      (void *)SELECTED_HEADLIGHT);
+  BRIDGE_MODEL_SET_UI_CB(BRIDGE_MODEL_PROP_HEADLIGHT_COLOR, headlight_btn,
+                         (void *)BRIDGE_MODEL_PROP_HEADLIGHT_COLOR);
 
   lv_obj_t *bodylight_btn = lv_button_create(container);
   UI_Button_Base_Apply(bodylight_btn, &bodylight_btn_cfg);
   lv_obj_add_event_cb(bodylight_btn, select_light_to_edit, LV_EVENT_CLICKED,
-                      (void *)EDITING_BODYLIGHT);
+                      (void *)SELECTED_BODYLIGHT);
 
-  // local_view_state.bodylight_btn = bodylight_btn;
+  BRIDGE_MODEL_SET_UI_CB(BRIDGE_MODEL_PROP_BODYLIGHT_COLOR, bodylight_btn,
+                         (void *)BRIDGE_MODEL_PROP_BODYLIGHT_COLOR);
 
   lv_obj_t *bm = lv_buttonmatrix_create(lv_layer_top());
   UI_Color_Picker_Apply(bm, &color_picker_cfg);
@@ -109,12 +91,38 @@ static void render(lv_obj_t *container) {
                          LV_OBJ_FLAG_HIDDEN, 0);
 }
 
+// static void render(lv_obj_t *container) {
+//   UI_Style_Create_Grid(container, UI_STYLE_GRID_2x1);
+
+//   lv_obj_t *headlight_btn = lv_button_create(container);
+//   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);
+//   lv_obj_add_event_cb(headlight_btn, select_light_to_edit, LV_EVENT_CLICKED,
+//                       (void *)SELECTED_HEADLIGHT);
+//   BRIDGE_MODEL_SET_UI_CB(BRIDGE_MODEL_PROP_HEADLIGHT_COLOR, headlight_btn,
+//                          (void *)BRIDGE_MODEL_PROP_HEADLIGHT_COLOR);
+
+//   lv_obj_t *bodylight_btn = lv_button_create(container);
+//   UI_Button_Base_Apply(bodylight_btn, &bodylight_btn_cfg);
+//   lv_obj_add_event_cb(bodylight_btn, select_light_to_edit, LV_EVENT_CLICKED,
+//                       (void *)EDITING_BODYLIGHT);
+
+//   BRIDGE_MODEL_SET_UI_CB(BRIDGE_MODEL_PROP_BODYLIGHT_COLOR, bodylight_btn,
+//                          (void *)BRIDGE_MODEL_PROP_BODYLIGHT_COLOR);
+
+//   lv_obj_t *bm = lv_buttonmatrix_create(lv_layer_top());
+//   UI_Color_Picker_Apply(bm, &color_picker_cfg);
+
+//   lv_subject_init_int(&local_view_state.show_color_picker, 0);
+//   lv_obj_bind_flag_if_eq(bm, &local_view_state.show_color_picker,
+//                          LV_OBJ_FLAG_HIDDEN, 0);
+// }
+
 /* Export */
 
-const UI_Screen_t UI_Screen_Light = {
-    .screen_id = UI_SCREEN_ID_LIGHT,
-    .render_fn = render,
-};
+// const UI_Screen_t UI_Screen_Light = {
+//     .screen_id = UI_SCREEN_ID_LIGHT,
+//     .render_fn = render,
+// };
 
 //////////
 
@@ -128,7 +136,7 @@ const UI_Screen_t UI_Screen_Light = {
 
 // 4. Construct a single rich action bundle to send to the engine
 // UI_Action_t action = {
-//     .action_id = UI_ACTION_ID_SET_PROP,
+//     .action_id = UI_ACTION_ID_SET_BRIDGE_PROP,
 //     .payload.prop_data = {
 // Map local target context back to global property IDs
 //         .prop_id = (local_view_state.current_target == EDITING_HEADLIGHT) ?

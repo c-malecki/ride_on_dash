@@ -1,9 +1,8 @@
 #ifndef __UI_LIGHT_H_
 #define __UI_LIGHT_H_
 
-#include "definitions.h"
-#include <stddef.h>
+#include "lvgl.h"
 
-extern const UI_Screen_t UI_Screen_Light;
+void Render_Light(lv_obj_t *container);
 
 #endif // __UI_LIGHT_H_

@@ -2,7 +2,6 @@
 #define __COLOR_PICKER_H_
 
 #include "_color.h"
-#include "definitions.h"
 #include "lvgl.h"
 
 typedef void (*color_picker_cb)(Color_ID color_id);

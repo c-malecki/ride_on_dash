@@ -3,7 +3,6 @@ idf_component_register(
         "../ui_engine/ui_engine.c"
         "../ui_engine/driver/display_driver.c"
         "../ui_engine/view/style.c"
-        "../ui_engine/view/screens.c"
         "../ui_engine/view/screen/home.c"
         "../ui_engine/view/screen/light.c"
         "../ui_engine/view/screen/splash.c"

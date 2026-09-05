@@ -1,9 +1,8 @@
 #ifndef __UI_SPLASH_H_
 #define __UI_SPLASH_H_
 
-#include "definitions.h"
-#include <stddef.h>
+#include "lvgl.h"
 
-extern const UI_Screen_t UI_Screen_Splash;
+void Render_Splash(lv_obj_t *container);
 
 #endif // __UI_SPLASH_H_

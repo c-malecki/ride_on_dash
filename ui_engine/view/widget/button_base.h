@@ -2,7 +2,6 @@
 #define __BUTTON_BASE_H_
 
 #include "_color.h"
-#include "definitions.h"
 #include "lvgl.h"
 
 typedef struct {

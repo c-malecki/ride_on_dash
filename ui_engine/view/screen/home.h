@@ -1,8 +1,8 @@
 #ifndef __HOME_H_
 #define __HOME_H_
 
-#include "definitions.h"
+#include "lvgl.h"
 
-extern const UI_Screen_t UI_Screen_Home;
+void Render_Home(lv_obj_t *container);
 
 #endif // __HOME_H_
