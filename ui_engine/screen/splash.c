@@ -3,7 +3,7 @@
 #include "layout.h"
 
 void Render_Splash(lv_obj_t *container) {
-  UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_1x1);
+  UTIL_Layout_Grid(container, UTIL_LAYOUT_GRID_1x1);
 
   lv_obj_t *led = lv_led_create(container);
   lv_obj_set_grid_cell(led, LV_GRID_ALIGN_CENTER, 0, 0, LV_GRID_ALIGN_CENTER, 0,

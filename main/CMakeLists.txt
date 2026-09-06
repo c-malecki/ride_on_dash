@@ -13,12 +13,12 @@ idf_component_register(
 
         "../ui_engine/_lvgl.c"
         "../ui_engine/ui_engine.c"
-        "../ui_engine/view/screen/layout.c"
-        "../ui_engine/view/screen/home.c"
-        "../ui_engine/view/screen/light.c"
-        "../ui_engine/view/screen/splash.c"
-        "../ui_engine/view/widget/button_base.c"
-        "../ui_engine/view/widget/color_picker.c"
+        "../ui_engine/screen/home.c"
+        "../ui_engine/screen/light.c"
+        "../ui_engine/screen/splash.c"
+        "../ui_engine/util/layout.c"
+        "../ui_engine/widget/button_base.c"
+        "../ui_engine/widget/color_picker.c"
 
     INCLUDE_DIRS "."
         "../common"
@@ -28,9 +28,9 @@ idf_component_register(
         "../drivers"
 
         "../ui_engine"
-        "../ui_engine/view"
-        "../ui_engine/view/screen"
-        "../ui_engine/view/widget"
+        "../ui_engine/util"
+        "../ui_engine/screen"
+        "../ui_engine/widget"
 
     REQUIRES esp_lcd esp_timer esp_driver_sdmmc esp_driver_i2s fatfs    
 )
