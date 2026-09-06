@@ -1,16 +1,12 @@
 #include "color_picker.h"
-#include "_color.h"
-#include "core/lv_obj_style_gen.h"
-#include "style.h"
-#include "widgets/buttonmatrix/lv_buttonmatrix.h"
 
 /* Local State */
 
 static color_picker_cb registered_color_picker_cb = NULL;
 
-static const Color_ID picker_colors[8] = {
-    COLOR_NONE,   COLOR_WHITE, COLOR_RED,  COLOR_ORANGE,
-    COLOR_YELLOW, COLOR_GREEN, COLOR_BLUE, COLOR_VIOLET,
+static const ROD_Color_ID picker_colors[8] = {
+    ROD_COLOR_NONE,   ROD_COLOR_WHITE, ROD_COLOR_RED,  ROD_COLOR_ORANGE,
+    ROD_COLOR_YELLOW, ROD_COLOR_GREEN, ROD_COLOR_BLUE, ROD_COLOR_VIOLET,
 };
 
 static void value_select_event_cb(lv_event_t *lv_event) {
@@ -20,7 +16,7 @@ static void value_select_event_cb(lv_event_t *lv_event) {
 
   lv_obj_t *bm = lv_event_get_target(lv_event);
   uint32_t idx = lv_buttonmatrix_get_selected_button(bm);
-  Color_ID color_id = picker_colors[idx];
+  ROD_Color_ID color_id = picker_colors[idx];
 
   registered_color_picker_cb(color_id);
 }
@@ -33,7 +29,7 @@ static void draw_cb(lv_event_t *lv_event) {
     return;
   }
   // id1 should be the idx of the btn in the map
-  if (draw_base->id1 >= COLOR_COUNT) {
+  if (draw_base->id1 >= ROD_COLOR_COUNT) {
     return;
   }
 
@@ -42,8 +38,7 @@ static void draw_cb(lv_event_t *lv_event) {
     return;
   }
 
-  fill->color = *UI_Color_Table_Find_By_ID(
-      CFG_Color_Find_Entry(draw_base->id1)->color_id);
+  fill->color = *ROD_Color_Find_Entry(picker_colors[draw_base->id1])->color;
 }
 
 const char *color_picker_map[] = {"OFF", "W", "R", "O", "\n",

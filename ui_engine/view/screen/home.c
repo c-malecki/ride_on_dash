@@ -1,7 +1,7 @@
 #include "home.h"
-#include "_color.h"
 #include "button_base.h"
-#include "style.h"
+#include "colors.h"
+#include "layout.h"
 #include "ui_engine.h"
 #include <stdint.h>
 
@@ -13,13 +13,13 @@ static void ui_home_screen_button_press(lv_event_t *lv_event) {
   UI_Screen_ID screen_id =
       (UI_Screen_ID)(uintptr_t)lv_event_get_user_data(lv_event);
 
-  UI_Engine_Navigate(screen_id);
+  UI_ENGINE_Navigate(screen_id);
 }
 
 /* UI Configs */
 
 const UI_Button_Base_Config_t light_btn_cfg = {
-    .color = COLOR_GRAY,
+    .color_id = ROD_COLOR_GRAY,
     .label = LV_SYMBOL_POWER,
     .row = 0,
     .col = 0,
@@ -35,7 +35,7 @@ const UI_Button_Base_Config_t light_btn_cfg = {
 /* Render Function */
 
 void Render_Home(lv_obj_t *container) {
-  UI_Style_Create_Grid(container, UI_STYLE_GRID_3x2);
+  UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_3x2);
   lv_obj_t *light_btn = lv_button_create(container);
 
   UI_Button_Base_Apply(light_btn, &light_btn_cfg);
@@ -44,7 +44,7 @@ void Render_Home(lv_obj_t *container) {
 }
 
 // static void render(lv_obj_t *container) {
-//   UI_Style_Create_Grid(container, UI_STYLE_GRID_3x2);
+//   UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_3x2);
 //   lv_obj_t *light_btn = lv_button_create(container);
 
 //   UI_Button_Base_Apply(light_btn, &light_btn_cfg);

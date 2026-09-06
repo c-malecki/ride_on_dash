@@ -1,7 +1,4 @@
 #include "button_base.h"
-#include "core/lv_obj_style_gen.h"
-#include "misc/lv_color.h"
-#include "style.h"
 
 void UI_Button_Base_Apply(lv_obj_t *btn,
                           const UI_Button_Base_Config_t *config) {
@@ -12,7 +9,7 @@ void UI_Button_Base_Apply(lv_obj_t *btn,
   lv_obj_set_grid_cell(btn, LV_GRID_ALIGN_CENTER, config->col, 1,
                        LV_GRID_ALIGN_CENTER, config->row, 1);
 
-  const lv_color_t *color = UI_Color_Table_Find_By_ID(config->color);
+  const lv_color_t *color = ROD_Color_Find_Entry(config->color_id)->color;
   lv_obj_set_style_bg_color(btn, *color, 0);
 
   if (config->label != NULL) {

@@ -1,7 +1,7 @@
 #ifndef __LED_DRIVER_H_
 #define __LED_DRIVER_H_
 
-#include "_color.h"
+#include "colors.h"
 #include "esp_err.h"
 #include <stdbool.h>
 
@@ -32,13 +32,13 @@ typedef enum {
 
 typedef struct {
   LED_Strip_ID strip_id;
-  Color_ID color_id;
+  ROD_Color_ID color_id;
 } LED_Set_Strip_Color_Arg_t;
 
 typedef void (*LED_Driver_Set_Strip_Color_CB)(LED_Set_Strip_Color_Arg_t *arg);
 
 esp_err_t LED_DRIVER_Init(void);
-void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id);
+void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, ROD_Color_ID color_id);
 
 LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void);
 

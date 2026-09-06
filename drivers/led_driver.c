@@ -1,5 +1,5 @@
 #include "led_driver.h"
-#include "_color.h"
+#include "colors.h"
 #include "led_strip.h"
 #include "led_strip_types.h"
 #include <stdbool.h>
@@ -69,7 +69,7 @@ esp_err_t LED_DRIVER_Init(void) {
 }
 
 static void led_driver_set_strip_color(LED_Set_Strip_Color_Arg_t *arg) {
-  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(arg->color_id);
+  const ROD_Color_Table_Entry_t *color = ROD_Color_Find_Entry(arg->color_id);
 
   switch (arg->strip_id) {
   case LED_STRIP_HEADLIGHTS: {
@@ -77,10 +77,10 @@ static void led_driver_set_strip_color(LED_Set_Strip_Color_Arg_t *arg) {
     led_strip_clear(strip_hll_handle);
     led_strip_clear(strip_hlr_handle);
     for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_hll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_hlr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
+      led_strip_set_pixel(strip_hll_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
+      led_strip_set_pixel(strip_hlr_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
     }
     led_strip_refresh(strip_hll_handle);
     led_strip_refresh(strip_hlr_handle);
@@ -92,10 +92,10 @@ static void led_driver_set_strip_color(LED_Set_Strip_Color_Arg_t *arg) {
     led_strip_clear(strip_bll_handle);
     led_strip_clear(strip_blr_handle);
     for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_bll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_blr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
+      led_strip_set_pixel(strip_bll_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
+      led_strip_set_pixel(strip_blr_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
     }
     led_strip_refresh(strip_bll_handle);
     led_strip_refresh(strip_blr_handle);
@@ -113,8 +113,8 @@ LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void) {
 
 //
 
-void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
-  const Color_Table_Entry_t *color = CFG_Color_Find_Entry(color_id);
+void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, ROD_Color_ID color_id) {
+  const ROD_Color_Table_Entry_t *color = ROD_Color_Find_Entry(color_id);
 
   switch (strip_id) {
   case LED_STRIP_HEADLIGHTS: {
@@ -122,10 +122,10 @@ void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
     led_strip_clear(strip_hll_handle);
     led_strip_clear(strip_hlr_handle);
     for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_hll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_hlr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
+      led_strip_set_pixel(strip_hll_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
+      led_strip_set_pixel(strip_hlr_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
     }
     led_strip_refresh(strip_hll_handle);
     led_strip_refresh(strip_hlr_handle);
@@ -137,10 +137,10 @@ void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, Color_ID color_id) {
     led_strip_clear(strip_bll_handle);
     led_strip_clear(strip_blr_handle);
     for (uint8_t i = 0; i < LED_STRIP_MAX_LEDS; i++) {
-      led_strip_set_pixel(strip_bll_handle, i, color->color->r, color->color->g,
-                          color->color->b);
-      led_strip_set_pixel(strip_blr_handle, i, color->color->r, color->color->g,
-                          color->color->b);
+      led_strip_set_pixel(strip_bll_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
+      led_strip_set_pixel(strip_blr_handle, i, color->color->red,
+                          color->color->green, color->color->blue);
     }
     led_strip_refresh(strip_bll_handle);
     led_strip_refresh(strip_blr_handle);

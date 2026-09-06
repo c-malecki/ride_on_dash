@@ -7,7 +7,7 @@
 
 extern QueueHandle_t system_event_queue;
 
-esp_err_t System_Init(void);
+esp_err_t CAR_SYSTEM_Init(void);
 
 typedef enum {
   SYSTEM_ACTION_ID_COUNT = 0,

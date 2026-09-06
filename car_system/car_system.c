@@ -1,4 +1,5 @@
 #include "car_system.h"
+#include "display_driver.h"
 #include "led_driver.h"
 // #include "sound_driver.h"
 #include "storage_driver.h"
@@ -8,16 +9,20 @@ QueueHandle_t system_event_queue = NULL;
 
 /* INTERFACE */
 
-esp_err_t System_Init(void) {
+esp_err_t CAR_SYSTEM_Init(void) {
   system_event_queue = xQueueCreate(5, sizeof(System_Action_t));
 
-  esp_err_t err = LED_DRIVER_Init();
+  esp_err_t err = DISPLAY_DRIVER_Init();
+  ESP_ERROR_CHECK(err);
 
-  err = STORAGE_DRIVER_Init();
+  err = LED_DRIVER_Init();
   ESP_ERROR_CHECK(err);
 
   // err = SOUND_DRIVER_Init();
   // ESP_ERROR_CHECK(err);
+
+  err = STORAGE_DRIVER_Init();
+  ESP_ERROR_CHECK(err);
 
   return err;
 }
