@@ -6,7 +6,7 @@
 #include "light.h"
 #include "splash.h"
 
-// QueueHandle_t ui_event_queue = NULL;
+QueueHandle_t UI_ENGINE_event_queue = NULL;
 
 /* STATIC VARS */
 
@@ -15,7 +15,7 @@ static lv_subject_t show_home_btn;
 
 /* PRIVATE PROTO */
 
-void load_screen(UI_Screen_ID screen_id);
+void load_screen(UI_ENGINE_Screen_ID screen_id);
 static void home_btn_cb(lv_event_t *lv_event);
 
 /* INTERFACE */
@@ -23,7 +23,7 @@ static void home_btn_cb(lv_event_t *lv_event);
 esp_err_t UI_ENGINE_Init(esp_lcd_panel_io_handle_t io_handle,
                          esp_lcd_panel_handle_t panel_handle,
                          esp_lcd_touch_handle_t touch_handle) {
-  // ui_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
+  UI_ENGINE_event_queue = xQueueCreate(5, sizeof(UI_ENGINE_Action_t));
 
   LVGL_Init(io_handle, panel_handle, touch_handle);
 
@@ -53,19 +53,22 @@ esp_err_t UI_ENGINE_Init(esp_lcd_panel_io_handle_t io_handle,
   lv_subject_init_int(&show_home_btn, 0);
   lv_obj_bind_flag_if_eq(home_btn, &show_home_btn, LV_OBJ_FLAG_HIDDEN, 0);
 
-  load_screen(UI_SCREEN_ID_HOME);
+  load_screen(UI_ENGINE_SCREEN_ID_HOME);
 
   return ESP_OK;
 };
 
-void UI_ENGINE_Navigate(UI_Screen_ID screen_id) {
-  lv_subject_set_int(&show_home_btn, screen_id == UI_SCREEN_ID_HOME ? 0 : 1);
+void UI_ENGINE_Navigate(UI_ENGINE_Screen_ID screen_id) {
+  lv_subject_set_int(&show_home_btn,
+                     screen_id == UI_ENGINE_SCREEN_ID_HOME ? 0 : 1);
   load_screen(screen_id);
 }
 
+void UI_ENGINE_Execute_Action(UI_ENGINE_Action_t *action) {}
+
 /* PRIVATE */
 
-void load_screen(UI_Screen_ID screen_id) {
+void load_screen(UI_ENGINE_Screen_ID screen_id) {
   lv_obj_t *old_container = lv_obj_get_child(main_screen_obj, 0);
 
   if (old_container != NULL) {
@@ -76,22 +79,22 @@ void load_screen(UI_Screen_ID screen_id) {
 
   switch (screen_id) {
 
-  case UI_SCREEN_ID_HOME: {
+  case UI_ENGINE_SCREEN_ID_HOME: {
     Render_Home(new_container);
     break;
   }
 
-  case UI_SCREEN_ID_LIGHT: {
+  case UI_ENGINE_SCREEN_ID_LIGHT: {
     Render_Light(new_container);
     break;
   }
 
-  case UI_SCREEN_ID_SPLASH: {
+  case UI_ENGINE_SCREEN_ID_SPLASH: {
     Render_Splash(new_container);
     break;
   }
 
-  case UI_SCREEN_ID_COUNT:
+  case UI_ENGINE_SCREEN_ID_COUNT:
     break;
   }
 }
@@ -102,5 +105,5 @@ static void home_btn_cb(lv_event_t *lv_event) {
     return;
   }
 
-  UI_ENGINE_Navigate(UI_SCREEN_ID_HOME);
+  UI_ENGINE_Navigate(UI_ENGINE_SCREEN_ID_HOME);
 }

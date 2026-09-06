@@ -10,8 +10,8 @@
 /* UI Actions */
 
 static void ui_home_screen_button_press(lv_event_t *lv_event) {
-  UI_Screen_ID screen_id =
-      (UI_Screen_ID)(uintptr_t)lv_event_get_user_data(lv_event);
+  UI_ENGINE_Screen_ID screen_id =
+      (UI_ENGINE_Screen_ID)(uintptr_t)lv_event_get_user_data(lv_event);
 
   UI_ENGINE_Navigate(screen_id);
 }
@@ -40,7 +40,7 @@ void Render_Home(lv_obj_t *container) {
 
   UI_Button_Base_Apply(light_btn, &light_btn_cfg);
   lv_obj_add_event_cb(light_btn, ui_home_screen_button_press, LV_EVENT_CLICKED,
-                      (void *)UI_SCREEN_ID_LIGHT);
+                      (void *)UI_ENGINE_SCREEN_ID_LIGHT);
 }
 
 // static void render(lv_obj_t *container) {

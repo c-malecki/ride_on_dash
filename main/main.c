@@ -22,23 +22,25 @@ static void lvgl_timer_task(void *arg) {
   }
 }
 
-static void system_task(void *arg) {
-  System_Action_t system_action;
+static void car_system_task(void *arg) {
+  CAR_SYSTEM_Action_t car_system_action;
   while (1) {
-    if (xQueueReceive(system_event_queue, &system_action, portMAX_DELAY)) {
-      System_Execute_Action(&system_action);
+    if (xQueueReceive(CAR_SYSTEM_event_queue, &car_system_action,
+                      portMAX_DELAY)) {
+      CAR_SYSTEM_Execute_Action(&car_system_action);
     }
   }
 }
 
-// static void ui_engine_task(void *arg) {
-//   Bridge_Event_t bridge_event;
-//   while (1) {
-//     if (xQueueReceive(ui_event_queue, &bridge_event, portMAX_DELAY)) {
-//       UI_Engine_Event_Consume(bridge_event);
-//     }
-//   }
-// }
+static void ui_engine_task(void *arg) {
+  UI_ENGINE_Action_t ui_engine_action;
+  while (1) {
+    if (xQueueReceive(UI_ENGINE_event_queue, &ui_engine_action,
+                      portMAX_DELAY)) {
+      UI_ENGINE_Execute_Action(&ui_engine_action);
+    }
+  }
+}
 
 void app_main(void) {
   lvgl_mutex = xSemaphoreCreateMutex();
@@ -56,5 +58,6 @@ void app_main(void) {
   xTaskCreatePinnedToCore(lvgl_timer_task, "lvgl_timer_task", 16384, NULL, 7,
                           NULL, 1);
 
-  xTaskCreatePinnedToCore(system_task, "system_task", 8192, NULL, 5, NULL, 0);
+  xTaskCreatePinnedToCore(car_system_task, "car_system_task", 8192, NULL, 5,
+                          NULL, 0);
 }
