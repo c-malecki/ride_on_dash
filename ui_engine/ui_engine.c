@@ -1,11 +1,10 @@
 #include "ui_engine.h"
-#include "_color.h"
-#include "display_driver.h"
+#include "_lvgl.h"
+#include "colors.h"
 #include "esp_err.h"
 #include "home.h"
 #include "light.h"
 #include "splash.h"
-#include "style.h"
 
 // QueueHandle_t ui_event_queue = NULL;
 
@@ -21,13 +20,12 @@ static void home_btn_cb(lv_event_t *lv_event);
 
 /* INTERFACE */
 
-esp_err_t UI_Engine_Init(void) {
+esp_err_t UI_ENGINE_Init(esp_lcd_panel_io_handle_t io_handle,
+                         esp_lcd_panel_handle_t panel_handle,
+                         esp_lcd_touch_handle_t touch_handle) {
   // ui_event_queue = xQueueCreate(5, sizeof(Bridge_Event_t));
 
-  esp_err_t err = Display_Driver_Init();
-  if (err != ESP_OK) {
-    return err;
-  }
+  LVGL_Init(io_handle, panel_handle, touch_handle);
 
   lv_obj_t *main_screen = lv_obj_create(NULL);
   lv_obj_set_size(main_screen, 320, 240);
@@ -44,7 +42,7 @@ esp_err_t UI_Engine_Init(void) {
   lv_obj_set_pos(home_btn, 10, 10);
   lv_obj_add_event_cb(home_btn, home_btn_cb, LV_EVENT_CLICKED, NULL);
 
-  const lv_color_t *color = UI_Color_Table_Find_By_ID(COLOR_GRAY);
+  const lv_color_t *color = ROD_Color_Find_Entry(ROD_COLOR_GRAY)->color;
   lv_obj_set_style_bg_color(home_btn, *color, 0);
 
   lv_obj_t *label = lv_label_create(home_btn);
@@ -60,7 +58,7 @@ esp_err_t UI_Engine_Init(void) {
   return ESP_OK;
 };
 
-void UI_Engine_Navigate(UI_Screen_ID screen_id) {
+void UI_ENGINE_Navigate(UI_Screen_ID screen_id) {
   lv_subject_set_int(&show_home_btn, screen_id == UI_SCREEN_ID_HOME ? 0 : 1);
   load_screen(screen_id);
 }
@@ -104,5 +102,5 @@ static void home_btn_cb(lv_event_t *lv_event) {
     return;
   }
 
-  UI_Engine_Navigate(UI_SCREEN_ID_HOME);
+  UI_ENGINE_Navigate(UI_SCREEN_ID_HOME);
 }

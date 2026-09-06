@@ -1,5 +1,6 @@
-#include "_system.h"
 #include "bridge.h"
+#include "car_system.h"
+#include "display_driver.h"
 #include "esp_err.h"
 #include "freertos/idf_additions.h"
 #include "freertos/semphr.h"
@@ -20,14 +21,6 @@ static void lvgl_timer_task(void *arg) {
     vTaskDelayUntil(&last_wake, period);
   }
 }
-
-/*
-  TODO:
-
-  Bridge translation later that will somehow take something from
-  the ui app and pipe it into the system event queue
-
-*/
 
 static void system_task(void *arg) {
   System_Action_t system_action;
@@ -50,10 +43,12 @@ static void system_task(void *arg) {
 void app_main(void) {
   lvgl_mutex = xSemaphoreCreateMutex();
 
-  esp_err_t err = System_Init();
+  esp_err_t err = CAR_SYSTEM_Init();
   ESP_ERROR_CHECK(err);
 
-  err = UI_Engine_Init();
+  err = UI_ENGINE_Init(DISPLAY_DRIVER_Get_IO_Handle(),
+                       DISPLAY_DRIVER_Get_Panel_Handle(),
+                       DISPLAY_DRIVER_Get_Touch_Handle());
   ESP_ERROR_CHECK(err);
 
   BRIDGE_MODEL_INIT();

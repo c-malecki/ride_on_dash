@@ -1,9 +1,9 @@
 #include "light.h"
-#include "_color.h"
 #include "bridge.h"
 #include "button_base.h"
 #include "color_picker.h"
-#include "style.h"
+#include "colors.h"
+#include "layout.h"
 #include <stdbool.h>
 
 /*
@@ -30,7 +30,7 @@ static struct {
 
 /* UI Actions */
 
-static void handle_color_picker(Color_ID color_id) {
+static void handle_color_picker(ROD_Color_ID color_id) {
   Bridge_Model_Prop_ID prop_id = BRIDGE_MODEL_PROP_NONE;
 
   if (local_view_state.selected_light == SELECTED_HEADLIGHT) {
@@ -55,14 +55,14 @@ static void select_light_to_edit(lv_event_t *lv_event) {
 /* UI Configs */
 
 const UI_Button_Base_Config_t headlight_btn_cfg = {
-    .color = COLOR_NONE,
+    .color_id = ROD_COLOR_NONE,
     .label = LV_SYMBOL_LEFT,
     .row = 0,
     .col = 0,
 };
 
 const UI_Button_Base_Config_t bodylight_btn_cfg = {
-    .color = COLOR_NONE,
+    .color_id = ROD_COLOR_NONE,
     .label = LV_SYMBOL_DRIVE,
     .row = 0,
     .col = 1,
@@ -75,7 +75,7 @@ const UI_Color_Picker_Config_t color_picker_cfg = {
 /* Render Function */
 
 void Render_Light(lv_obj_t *container) {
-  UI_Style_Create_Grid(container, UI_STYLE_GRID_2x1);
+  UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_2x1);
 
   lv_obj_t *headlight_btn = lv_button_create(container);
   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);
@@ -101,7 +101,7 @@ void Render_Light(lv_obj_t *container) {
 }
 
 // static void render(lv_obj_t *container) {
-//   UI_Style_Create_Grid(container, UI_STYLE_GRID_2x1);
+//   UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_2x1);
 
 //   lv_obj_t *headlight_btn = lv_button_create(container);
 //   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);

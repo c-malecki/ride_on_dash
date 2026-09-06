@@ -1,5 +1,5 @@
-#ifndef __SYSTEM_H_
-#define __SYSTEM_H_
+#ifndef __CAR_SYSTEM_H_
+#define __CAR_SYSTEM_H_
 
 #include "esp_err.h"
 #include "freertos/FreeRTOS.h"
@@ -7,7 +7,7 @@
 
 extern QueueHandle_t system_event_queue;
 
-esp_err_t System_Init(void);
+esp_err_t CAR_SYSTEM_Init(void);
 
 typedef enum {
   SYSTEM_ACTION_ID_COUNT = 0,
@@ -23,4 +23,4 @@ typedef struct {
 void System_Execute_Action(System_Action_t *action);
 // void System_Set_LED_Strip(LED_Set_Strip_Color_Arg_t *arg);
 
-#endif // __SYSTEM_H_
+#endif // __CAR_SYSTEM_H_

@@ -1,11 +1,11 @@
 #ifndef __BUTTON_BASE_H_
 #define __BUTTON_BASE_H_
 
-#include "_color.h"
+#include "colors.h"
 #include "lvgl.h"
 
 typedef struct {
-  Color_ID color;
+  ROD_Color_ID color_id;
   const char *label;
   int32_t row;
   int32_t col;

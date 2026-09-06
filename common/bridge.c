@@ -1,11 +1,10 @@
 #include "bridge.h"
-#include "_color.h"
-#include "_system.h"
+#include "car_system.h"
+#include "colors.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/idf_additions.h"
 #include "freertos/projdefs.h"
 #include "freertos/semphr.h"
-#include "style.h"
 // #include "ui_engine.h"
 
 #include "esp_log.h"
@@ -13,8 +12,8 @@
 static Bridge_Model_t BRIDGE_MODEL;
 
 void BRIDGE_MODEL_INIT(void) {
-  lv_subject_init_int(&BRIDGE_MODEL.headlight_color, COLOR_NONE);
-  lv_subject_init_int(&BRIDGE_MODEL.bodylight_color, COLOR_NONE);
+  lv_subject_init_int(&BRIDGE_MODEL.headlight_color, ROD_COLOR_NONE);
+  lv_subject_init_int(&BRIDGE_MODEL.bodylight_color, ROD_COLOR_NONE);
 }
 
 void BRIDGE_MODEL_SET_PROP(Bridge_Model_Prop_ID prop_id, uint32_t value) {
@@ -71,8 +70,8 @@ static void change_light_button_color_observer_cb(lv_observer_t *observer,
 
   lv_obj_t *btn = lv_observer_get_target_obj(observer);
 
-  Color_ID color_id = lv_subject_get_int(subject);
-  const lv_color_t *color = UI_Color_Table_Find_By_ID(color_id);
+  ROD_Color_ID color_id = lv_subject_get_int(subject);
+  const lv_color_t *color = ROD_Color_Find_Entry(color_id)->color;
   lv_obj_set_style_bg_color(btn, *color, LV_PART_MAIN | LV_STATE_DEFAULT);
 
   if (prop_id == BRIDGE_MODEL_PROP_HEADLIGHT_COLOR) {

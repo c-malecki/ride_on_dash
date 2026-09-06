@@ -29,7 +29,7 @@ extern const UI_Screen_t UI_Screen_{{.TitleName}};
 
 const sourceTemplate = `// {{.Name}}.c
 #include "{{.Name}}.h"
-#include "_color.h"
+#include "colors.h"
 #include "button_base.h"
 #include "style.h"
 #include "ui_engine.h"

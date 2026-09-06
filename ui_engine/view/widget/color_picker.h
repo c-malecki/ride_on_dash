@@ -1,10 +1,10 @@
 #ifndef __COLOR_PICKER_H_
 #define __COLOR_PICKER_H_
 
-#include "_color.h"
+#include "colors.h"
 #include "lvgl.h"
 
-typedef void (*color_picker_cb)(Color_ID color_id);
+typedef void (*color_picker_cb)(ROD_Color_ID color_id);
 
 typedef struct {
   color_picker_cb color_picker_cb;
