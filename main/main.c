@@ -1,5 +1,5 @@
-#include "_system.h"
 #include "bridge.h"
+#include "car_system.h"
 #include "esp_err.h"
 #include "freertos/idf_additions.h"
 #include "freertos/semphr.h"
@@ -20,14 +20,6 @@ static void lvgl_timer_task(void *arg) {
     vTaskDelayUntil(&last_wake, period);
   }
 }
-
-/*
-  TODO:
-
-  Bridge translation later that will somehow take something from
-  the ui app and pipe it into the system event queue
-
-*/
 
 static void system_task(void *arg) {
   System_Action_t system_action;

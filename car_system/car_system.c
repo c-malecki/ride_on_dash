@@ -1,5 +1,7 @@
-#include "_system.h"
+#include "car_system.h"
 #include "led_driver.h"
+// #include "sound_driver.h"
+#include "storage_driver.h"
 
 QueueHandle_t system_event_queue = NULL;
 /* FORWARD PROTO DEP */
@@ -9,12 +11,12 @@ QueueHandle_t system_event_queue = NULL;
 esp_err_t System_Init(void) {
   system_event_queue = xQueueCreate(5, sizeof(System_Action_t));
 
-  esp_err_t err = LED_Init();
+  esp_err_t err = LED_DRIVER_Init();
 
-  // err = Sound_Init();
-  // ESP_ERROR_CHECK(err);
+  err = STORAGE_DRIVER_Init();
+  ESP_ERROR_CHECK(err);
 
-  // err = Storage_Init();
+  // err = SOUND_DRIVER_Init();
   // ESP_ERROR_CHECK(err);
 
   return err;

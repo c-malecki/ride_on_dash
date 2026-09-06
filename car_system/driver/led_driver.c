@@ -1,6 +1,5 @@
 #include "led_driver.h"
 #include "_color.h"
-#include "hardware.h"
 #include "led_strip.h"
 #include "led_strip_types.h"
 #include <stdbool.h>
@@ -49,7 +48,7 @@ static const led_strip_rmt_config_t rmt_config = {
     .flags.with_dma = false,
 };
 
-esp_err_t LED_Init(void) {
+esp_err_t LED_DRIVER_Init(void) {
   esp_err_t err =
       led_strip_new_rmt_device(&hll_config, &rmt_config, &strip_hll_handle);
   if (err != ESP_OK) {
