@@ -1,5 +1,6 @@
 #include "vm_light.h"
 #include "esp_log.h"
+#include "led_driver.h"
 
 /*
 
@@ -58,11 +59,13 @@ void VM_Light_Set_Selected_Light_Color(VM_Light_t *vm_light,
 
   case VM_LIGHT_HEADLIGHT: {
     lv_subject_set_color(&vm_light->headlight_color, *lv_color);
+    LED_DRIVER_Set_Strip_Color(LED_STRIP_HEADLIGHTS, *lv_color);
     break;
   }
 
   case VM_LIGHT_BODYLIGHT: {
     lv_subject_set_color(&vm_light->bodylight_color, *lv_color);
+    LED_DRIVER_Set_Strip_Color(LED_STRIP_BODYLIGHTS, *lv_color);
     break;
   }
 

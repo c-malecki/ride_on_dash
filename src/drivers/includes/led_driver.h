@@ -3,6 +3,7 @@
 
 #include "colors.h"
 #include "esp_err.h"
+#include "misc/lv_color.h"
 #include <stdbool.h>
 
 /*
@@ -30,17 +31,17 @@ typedef enum {
   LED_STRIP_BODYLIGHTS,
 } LED_Strip_ID;
 
-typedef struct {
-  LED_Strip_ID strip_id;
-  Common_Color_ID color_id;
-} LED_Set_Strip_Color_Arg_t;
+// typedef struct {
+//   LED_Strip_ID strip_id;
+//   Common_Color_ID color_id;
+// } LED_Set_Strip_Color_Arg_t;
 
-typedef void (*LED_Driver_Set_Strip_Color_CB)(LED_Set_Strip_Color_Arg_t *arg);
+// typedef void (*LED_Driver_Set_Strip_Color_CB)(LED_Set_Strip_Color_Arg_t
+// *arg);
 
 esp_err_t LED_DRIVER_Init(void);
-void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id,
-                                Common_Color_ID color_id);
+void LED_DRIVER_Set_Strip_Color(LED_Strip_ID strip_id, lv_color_t color);
 
-LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void);
+// LED_Driver_Set_Strip_Color_CB LED_Driver_Get_Set_Strip_Color_CB(void);
 
 #endif // __LED_DRIVER_H_
