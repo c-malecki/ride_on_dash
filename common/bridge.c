@@ -23,14 +23,14 @@ void BRIDGE_MODEL_SET_PROP(Bridge_Model_Prop_ID prop_id, uint32_t value) {
   case BRIDGE_MODEL_PROP_HEADLIGHT_COLOR: {
     lv_subject_set_int(&BRIDGE_MODEL.headlight_color, value);
 
-    System_Action_t action = {
-        .action_id = SYSTEM_ACTION_ID_SET_HEADLIGHT,
+    CAR_SYSTEM_Action_t action = {
+        .action_id = CAR_SYSTEM_ACTION_ID_SET_HEADLIGHT,
         .value = value,
     };
 
-    if (xQueueSend(system_event_queue, &action, pdMS_TO_TICKS(50))) {
-      ESP_LOGW("BRIDGE", "system action queue full, dropped action = "
-                         "SYSTEM_ACTION_ID_SET_HEADLIGHT");
+    if (xQueueSend(CAR_SYSTEM_event_queue, &action, pdMS_TO_TICKS(50))) {
+      ESP_LOGW("BRIDGE", "car system action queue full, dropped action = "
+                         "CAR_SYSTEM_ACTION_ID_SET_HEADLIGHT");
     }
     break;
   }
@@ -38,14 +38,14 @@ void BRIDGE_MODEL_SET_PROP(Bridge_Model_Prop_ID prop_id, uint32_t value) {
   case BRIDGE_MODEL_PROP_BODYLIGHT_COLOR: {
     lv_subject_set_int(&BRIDGE_MODEL.bodylight_color, value);
 
-    System_Action_t action = {
-        .action_id = SYSTEM_ACTION_ID_SET_BODYLIGHT,
+    CAR_SYSTEM_Action_t action = {
+        .action_id = CAR_SYSTEM_ACTION_ID_SET_BODYLIGHT,
         .value = value,
     };
 
-    if (xQueueSend(system_event_queue, &action, pdMS_TO_TICKS(50))) {
-      ESP_LOGW("BRIDGE", "system action queue full, dropped action = set "
-                         "SYSTEM_ACTION_ID_SET_BODYLIGHT");
+    if (xQueueSend(CAR_SYSTEM_event_queue, &action, pdMS_TO_TICKS(50))) {
+      ESP_LOGW("BRIDGE", "car system action queue full, dropped action = set "
+                         "CAR_SYSTEM_ACTION_ID_SET_BODYLIGHT");
     }
 
     break;

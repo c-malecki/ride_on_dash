@@ -75,7 +75,7 @@ const UI_Color_Picker_Config_t color_picker_cfg = {
 /* Render Function */
 
 void Render_Light(lv_obj_t *container) {
-  UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_2x1);
+  UTIL_Layout_Grid(container, UTIL_LAYOUT_GRID_2x1);
 
   lv_obj_t *headlight_btn = lv_button_create(container);
   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);
@@ -101,7 +101,7 @@ void Render_Light(lv_obj_t *container) {
 }
 
 // static void render(lv_obj_t *container) {
-//   UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_2x1);
+//   UTIL_Layout_Grid(container, UTIL_LAYOUT_GRID_2x1);
 
 //   lv_obj_t *headlight_btn = lv_button_create(container);
 //   UI_Button_Base_Apply(headlight_btn, &headlight_btn_cfg);

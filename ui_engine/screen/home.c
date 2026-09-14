@@ -10,8 +10,8 @@
 /* UI Actions */
 
 static void ui_home_screen_button_press(lv_event_t *lv_event) {
-  UI_Screen_ID screen_id =
-      (UI_Screen_ID)(uintptr_t)lv_event_get_user_data(lv_event);
+  UI_ENGINE_Screen_ID screen_id =
+      (UI_ENGINE_Screen_ID)(uintptr_t)lv_event_get_user_data(lv_event);
 
   UI_ENGINE_Navigate(screen_id);
 }
@@ -35,16 +35,16 @@ const UI_Button_Base_Config_t light_btn_cfg = {
 /* Render Function */
 
 void Render_Home(lv_obj_t *container) {
-  UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_3x2);
+  UTIL_Layout_Grid(container, UTIL_LAYOUT_GRID_3x2);
   lv_obj_t *light_btn = lv_button_create(container);
 
   UI_Button_Base_Apply(light_btn, &light_btn_cfg);
   lv_obj_add_event_cb(light_btn, ui_home_screen_button_press, LV_EVENT_CLICKED,
-                      (void *)UI_SCREEN_ID_LIGHT);
+                      (void *)UI_ENGINE_SCREEN_ID_LIGHT);
 }
 
 // static void render(lv_obj_t *container) {
-//   UI_LAYOUT_Create_Grid(container, UI_LAYOUT_GRID_3x2);
+//   UTIL_Layout_Grid(container, UTIL_LAYOUT_GRID_3x2);
 //   lv_obj_t *light_btn = lv_button_create(container);
 
 //   UI_Button_Base_Apply(light_btn, &light_btn_cfg);
