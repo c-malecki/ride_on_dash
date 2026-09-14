@@ -42,7 +42,8 @@ esp_err_t UI_ENGINE_Init(esp_lcd_panel_io_handle_t io_handle,
   lv_obj_set_pos(home_btn, 10, 10);
   lv_obj_add_event_cb(home_btn, home_btn_cb, LV_EVENT_CLICKED, NULL);
 
-  const lv_color_t *color = ROD_Color_Find_Entry(ROD_COLOR_GRAY)->color;
+  const lv_color_t *color =
+      Common_Color_Find_Entry(COMMON_COLOR_GRAY)->lv_color;
   lv_obj_set_style_bg_color(home_btn, *color, 0);
 
   lv_obj_t *label = lv_label_create(home_btn);
